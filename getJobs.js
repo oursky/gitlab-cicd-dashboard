@@ -1,53 +1,40 @@
+const gitlabAPI = require("./gitlabAPI");
+const apiToken = process.env.API_TOKEN; 
+
 module.exports.getJobs = function getJobs(requestedGroupID) {
-  return new Promise((resolve) => {
 
-    const apiToken = process.env.API_TOKEN; 
-    const gitlabAPI = require("./gitlabAPI");
     const groupID = requestedGroupID;
-
     const getProjectSearchParams = new URLSearchParams("");
     getProjectSearchParams.append("order_by", "last_activity_at");
 
     console.log(`Getting jobs of group: ${groupID}`);
-    gitlabAPI
-      .getProjectsByGroupID(groupID, apiToken, getProjectSearchParams)
+    return gitlabAPI
+      .getProjectsByGroupID(apiToken, groupID, getProjectSearchParams)
 
-      .then((data) => {
-        const ids = [];
-        for (let i = 0; i < data.length; i += 1) {
-          const item = data[i];
-          ids[i] = item.id;
-        }
+      .then((projects) => {
+        const ids = projects.map(project => project.id) 
         return ids;
       })
       .then((projectIDs) => {
-        const data = [];
-        for (let i = 0; i < projectIDs.length; i += 1) {
-          data[i] = gitlabAPI.getJobsByProjectID(projectIDs[i], apiToken);
-        }
-        return Promise.all(data);
+        const jobPromises = projectIDs.map(projectID => gitlabAPI.getJobsByProjectID(apiToken, projectID))
+        return Promise.all(jobPromises);
       })
+
+
       .then((data) => {
-        const outputJobs = [];
         const flattenedJobArray = data.flat();
         const sortedData = flattenedJobArray.sort(
           (a, b) => a.created_at - b.created_at
         );
-        for (let i = 0, j = 0; i < sortedData.length; i += 1) {
-          const jobStatus = sortedData[i].status;
-
-          if (
-            jobStatus === "success" ||
-            jobStatus === "canceled" ||
-            jobStatus === "failed" ||
-            jobStatus === "skipped"
-          ) {
-          } else {
-            outputJobs[j] = sortedData[i];
-            j++;
+        
+        let outputJobs = sortedData.filter(data => {
+          if(
+            data.status==="success"||
+            data.status==="canceled"||
+            data.status==="failed"||
+            data.status==="skipped"){
+            return false;
           }
-        }
-        resolve(outputJobs);
+        })
       });
-  });
 };

@@ -1,12 +1,12 @@
 const fetch = require("node-fetch");
 
 exports.getProjectsByGroupID = function getProjectsByGroupID(
-  GroupID,
   key,
+  groupID,
   searchParam
 ) {
   const projects = fetch(
-    `https://gitlab.com/api/v4/groups/${GroupID}/projects?${searchParam}`,
+    `https://gitlab.com/api/v4/groups/${groupID}/projects?${searchParam}`,
     {
       headers: {
         "PRIVATE-TOKEN": key,
@@ -19,8 +19,8 @@ exports.getProjectsByGroupID = function getProjectsByGroupID(
   });
 };
 
-exports.getJobsByProjectID = function getJobsByProjectID(ProjectID, key) {
-  const jobs = fetch(`https://gitlab.com/api/v4/projects/${ProjectID}/jobs`, {
+exports.getJobsByProjectID = function getJobsByProjectID(key, projectID) {
+  const jobs = fetch(`https://gitlab.com/api/v4/projects/${projectID}/jobs`, {
     headers: {
       "PRIVATE-TOKEN": key,
     },
