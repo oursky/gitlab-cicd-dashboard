@@ -1,0 +1,32 @@
+{
+  "name": "gitlabapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint `**/*.js` --ignore-pattern node_modules/",
+    "prettier": "prettier --write ."
+  },
+  "dependencies": {
+    "@oursky/eslint-plugin": "^5.0.0",
+    "ejs": "^3.1.6",
+    "eslint": "^7.31.0",
+    "express": "^4.17.1",
+    "node-fetch": "2.6.1",
+    "postcss-import": "^14.0.2",
+    "tailwindcss": "^2.2.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
+    "autoprefixer": "^10.3.1",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "postcss": "^8.3.5",
+    "prettier": "2.3.2"
+  }
+}

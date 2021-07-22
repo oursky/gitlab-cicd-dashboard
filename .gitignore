@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+/.blackbox/pubring.gpg~
+/.blackbox/pubring.kbx~
+/.blackbox/secring.gpg
+.DS_Store

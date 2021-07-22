@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
+
+* {
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  border: inset solid #ddd;
+  padding: 5px;
+  text-align: center;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  //content: "";
+  //display:flex;
+  flex-direction: row;
+  clear: both;
+}
+.main-container {
+  padding: 10px;
+  border: solid #ddd;
+  height: auto;
+  //background: #eee;
+  box-shadow: 0 5px 5px 2px grey;
+}
+.c-head-title {
+  padding: 5px;
+  min-height: 50px;
+  border: solid 1px #eee;
+  font-size: 30px;
+  margin: 1px;
+  background: #fff;
+  box-shadow: inset 0 -0.3rem lightblue;
+  position: relative;
+}
+.p-head-title {
+  padding: 5px;
+  min-height: 50px;
+  border: solid 1px #eee;
+  font-size: 30px;
+  margin: 1px;
+  background: #fff;
+  box-shadow: inset 0 -0.3rem #c96785;
+  position: relative;
+}
+.r-head-title {
+  padding: 5px;
+  min-height: 50px;
+  border: solid 1px #eee;
+  font-size: 30px;
+  margin: 1px;
+  background: #fff;
+  box-shadow: inset 0 -0.3rem #90c967;
+  position: relative;
+}
+.created-card {
+  padding: 5px;
+  min-height: 100px;
+  border: solid 1px #eee;
+  color: #ccc;
+  margin: 10px;
+  background: #fff;
+  box-shadow: inset 0.5rem 0 lightblue, 0 0.5rem #ddd;
+}
+.pending-card {
+  padding: 1px;
+  min-height: 100px;
+  border: solid 1px #eee;
+  color: #ccc;
+  margin: 10px;
+  background: #fff;
+  box-shadow: inset 0.5rem 0 #c96785, 0 0.5rem #ddd;
+}
+.running-card {
+  padding: 1px;
+  min-height: 100px;
+  border: solid 1px #eee;
+  color: #ccc;
+  margin: 10px;
+  background: #fff;
+  box-shadow: inset 0.5rem 0 #90c967, 0 0.5rem #ddd;
+}
+
+.id-block {
+  position: relative;
+}
+.c-id-block-text {
+  color: lightblue;
+}
+.p-id-block-text {
+  color: #c96785;
+}
+.r-id-block-text {
+  color: #90c967;
+}
+.time-block {
+  color: #aaa;
+  position: relative;
+}
+.icon-block {
+  position: relative;
+  bottom: 0px;
+}
+
+@media (max-width: 650px) {
+  .row {
+    //flex-direction: column;
+    //width: 100%;
+    align-items: stretch;
+  }
+  .column {
+    width: 100%;
+  }
+  .created-card {
+    padding: 1px;
+    min-height: 0px;
+    width: auto;
+  }
+  .pending-card {
+    padding: 1px;
+    min-height: 0px;
+    width: auto;
+  }
+  .running-card {
+    padding: 1px;
+    min-height: 0px;
+    width: auto;
+  }
+}
