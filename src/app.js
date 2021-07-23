@@ -1,4 +1,4 @@
-const getJobs = require("./src/getJobs");
+const getJobs = require("./getJobs");
 const express = require("express");
 const app = express();
 const port = 8081;
@@ -9,7 +9,9 @@ app.use(express.static(path.join(__dirname)));
 app.set("view engine", "ejs");
 
 app.get("/groups/:id/jobs", function (req, res) {
-  getJobs.getJobs(req.params.id).then((data) => res.render("pages/index"));
+  getJobs
+    .getJobs(req.params.id)
+    .then((data) => res.render("pages/index", { data: data }));
 });
 
 app.listen(port, () => {
