@@ -9,11 +9,7 @@ app.use(express.static(path.join(__dirname)));
 app.set("view engine", "ejs");
 
 app.get("/groups/:id/jobs", function (req, res) {
-  getJobs
-    .getJobs(req.params.id)
-    .then((data) =>
-      res.render("pages/index")
-    );
+  getJobs.getJobs(req.params.id).then((data) => res.render("pages/index"));
 });
 
 app.listen(port, () => {
