@@ -29,13 +29,13 @@ module.exports.getJobs = function getJobs(requestedGroupID) {
 
       let outputJobs = sortedData.filter((data) => {
         if (
-          data.status === "success" ||
-          data.status === "canceled" ||
-          data.status === "failed" ||
-          data.status === "skipped"
+          data.status === "running" ||
+          data.status === "pending" ||
+          data.status === "created"
         ) {
-          return false;
+          return true;
         }
       });
+      return outputJobs;
     });
 };
