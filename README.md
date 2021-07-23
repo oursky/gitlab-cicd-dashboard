@@ -3,6 +3,7 @@
 
 Usage:
 ```
+yarn add express
 export API_TOKEN=your token
 node app.js
 ```
