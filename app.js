@@ -1,4 +1,4 @@
-const getJobs = require("./getJobs");
+const getJobs = require("./src/getJobs");
 const express = require("express");
 const app = express();
 const port = 8081;
