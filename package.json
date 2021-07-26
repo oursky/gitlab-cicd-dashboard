@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint `**/*.js` --ignore-pattern node_modules/",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "build-tailwindcss": "tailwindcss -i src/views/css/styles.css -o src/views/css/tailwind.css"
   },
   "dependencies": {
     "@oursky/eslint-plugin": "5.0.0",
