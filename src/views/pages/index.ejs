@@ -1,71 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <%- include('../partials/head'); %>
-  
-  <% var j = 0; var n = 0; var m = 0 %>
-  <% const running = []; const pending = []; const created = [] %>
-  <% for(let i = 0; i < data.length; i++) { %>
-  <% if(data[i].status === "running"){%>
-  <%    running[j] = data[i]; j++%>
-  <%}%>
-  <%if(data[i].status === "pending"){%>
-  <%    pending[n] = data[i]; n++%>
-  <%}%>
-  <%if(data[i].status === "created"){%>
-  <%    created[m] = data[i]; m++%>
-  <%}%>
-  <%}%>
+
+    <% var j=0; var n=0; var m=0 %>
+    <% const running=[]; const pending=[]; const created=[] %>
+    <% for(let i=0; i < data.length; i++) { %>
+    <% if(data[i].status==="running" ){%>
+    <% running[j]=data[i]; j++%>
+    <%}%>
+    <%if(data[i].status==="pending" ){%>
+    <% pending[n]=data[i]; n++%>
+    <%}%>
+    <%if(data[i].status==="created" ){%>
+    <% created[m]=data[i]; m++%>
+    <%}%>
+    <%}%>
 
 </head>
+
 <body class="p-0 bg-fixed bg-gray-100">
 
-      <div class="p-5 min-h-scren max-h-screen flex flex-col">
-        <div class="flex flex-grow flex-row">
-        <div class="flex flex-grow-0">
-          <img src="../../views/images/gitlab_icon.png" class="max-h-10 max-w-10">
-        </div>
-        <div class="flex flex-grow "></div>
-        <div class="flex flex-grow-0">
+  <div class="p-5 min-h-scren">
+    <div class="flex flex-row">
+      <div class="flex flex-grow-0">
+        <img src="../../views/images/gitlab_icon.png" class="max-h-10 max-w-10">
+      </div>
+      <div class="flex flex-grow "></div>
+      <div class="flex flex-grow-0">
         <div class=""><img src="../../views/images/profile_icon.png" class="max-h-10 max-w-10">
         </div>
-        </div>
-        </div>
-            <div class="flex flex-grow my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
-              <div class="flex flex-grow flex-col sm:w-1/3 text-center w-full">
-                <div class="p-5 text-3xl bg-white relative ">Created (<%= created.length %>)</div>
-                <% for(let i=0; i<created.length; i++){ %>
-                  <a href="<%= created[i].web_url %>" target="_blank"><div class="created-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
-                  <div class="relative">#<span class="text-sky-300" style="font-weight:bold"><%= created[i].id %></span></div>
-                  Created At: <span class="text-gray-400 relative"><%= created[i].created_at %></span><br>
-                  tags: <span class="text-gray-400 relative"><%= created[i].tag_list %></span>
-                </div></a>
-                  <%}%>
-              </div>
-              <div class="flex flex-grow flex-col sm:w-1/3 text-center w-full">
-                <div class="p-5 text-3xl bg-white relative ">Pending (<%= pending.length %>)</div>
-                <% for(let i=0; i<pending.length; i++){ %>
-                  <a href="<%=pending[i].web_url%>" target="_blank"><div class="pending-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
-                    <div class="relative">#<span class="text-red-400" style="font-weight:bold"><%= pending[i].id %></span></div>
-                    Created At: <span class="text-gray-400 relative"><%= pending[i].created_at %></span><br>
-                    tags: <span class="text-gray-400 relative"><%= pending[i].tag_list %></span>
-                </div></a>
-                  <%}%> 
-                </div>
-              <div class="flex flex-grow flex-col sm:w-1/3 text-center w-full">
-                <div class="p-5 text-3xl bg-white relative ">Running (<%= running.length %>)</div>
-                <% for(let i=0; i<running.length; i++){ %>
-                  <a href="<%=running[i].web_url%>" target="_blank"><div class="running-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
-                    <div class="relative">#<span class="text-green-300" style="font-weight:bold"><%= running[i].id %></span></div>
-                    Created At: <span class="text-gray-400 relative"><%= running[i].created_at %></span><br>
-                    Started At: <span class="text-gray-400 relative"><%= running[i].started_at %></span><br>
-                    tags: <span class="text-gray-400 relative"><%= running[i].tag_list %></span>
-                </div></a>
-                  <%}%>
-              </div>
       </div>
-      <footer>
-        <%- include('../partials/footer'); %>
-      </footer>
-</html>
+    </div>
+    <div
+      class="flex my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
+      <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
+        <div class="p-5 text-3xl bg-white relative ">Created (<%= created.length %>)</div>
+        <% for(let i=0; i<created.length; i++){ %>
+          <a href="<%= created[i].web_url %>" target="_blank">
+            <div
+              class="created-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
+              <div class="relative">#<span class="text-sky-300" style="font-weight:bold">
+                  <%= created[i].id %>
+                </span></div>
+              Created At: <span class="text-gray-400 relative">
+                <%= created[i].created_at %>
+              </span><br>
+              tags: <span class="text-gray-400 relative">
+                <%= created[i].tag_list %>
+              </span>
+            </div>
+          </a>
+          <%}%>
+      </div>
+      <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
+        <div class="p-5 text-3xl bg-white relative ">Pending (<%= pending.length %>)</div>
+        <% for(let i=0; i<pending.length; i++){ %>
+          <a href="<%=pending[i].web_url%>" target="_blank">
+            <div
+              class="pending-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
+              <div class="relative">#<span class="text-red-400" style="font-weight:bold">
+                  <%= pending[i].id %>
+                </span></div>
+              Created At: <span class="text-gray-400 relative">
+                <%= pending[i].created_at %>
+              </span><br>
+              tags: <span class="text-gray-400 relative">
+                <%= pending[i].tag_list %>
+              </span>
+            </div>
+          </a>
+          <%}%>
+      </div>
+      <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
+        <div class="p-5 text-3xl bg-white relative ">Running (<%= running.length %>)</div>
+        <% for(let i=0; i<running.length; i++){ %>
+          <a href="<%=running[i].web_url%>" target="_blank">
+            <div
+              class="running-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
+              <div class="relative">#<span class="text-green-300" style="font-weight:bold">
+                  <%= running[i].id %>
+                </span></div>
+              Created At: <span class="text-gray-400 relative">
+                <%= running[i].created_at %>
+              </span><br>
+              Started At: <span class="text-gray-400 relative">
+                <%= running[i].started_at %>
+              </span><br>
+              tags: <span class="text-gray-400 relative">
+                <%= running[i].tag_list %>
+              </span>
+            </div>
+          </a>
+          <%}%>
+      </div>
+    </div>
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer>
 
+</html>
