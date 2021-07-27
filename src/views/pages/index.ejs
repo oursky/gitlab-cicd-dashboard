@@ -20,26 +20,21 @@
 </head>
 <body class="p-0 bg-fixed bg-gray-100">
 
-      <div class="p-5 min-h-screen">
-        <div class="overflow-hidden">
-        <div class="float-left">
-        <div class="">
+      <div class="p-5 min-h-scren max-h-screen flex flex-col">
+        <div class="flex flex-grow flex-row">
+        <div class="flex flex-grow-0">
           <img src="../../views/images/gitlab_icon.png" class="max-h-10 max-w-10">
         </div>
-        </div>
-        <div class="float-right">
+        <div class="flex flex-grow "></div>
+        <div class="flex flex-grow-0">
         <div class=""><img src="../../views/images/profile_icon.png" class="max-h-10 max-w-10">
         </div>
         </div>
         </div>
-        <div class="">
-        <div class="top-12 mt-5 mb-5 left-5 right-5 absolute bottom-5 bg-white shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-sm">
-          <div class="h-full bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
-            <div class="flex-row clear-both">
-              <div class="float-left sm:w-1/3 text-center w-full">
+            <div class="flex flex-grow my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
+              <div class="flex flex-grow flex-col sm:w-1/3 text-center w-full">
                 <div class="p-5 text-3xl bg-white relative ">Created (<%= created.length %>)</div>
                 <% for(let i=0; i<created.length; i++){ %>
-    
                   <a href="<%= created[i].web_url %>" target="_blank"><div class="created-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
                   <div class="relative">#<span class="text-sky-300" style="font-weight:bold"><%= created[i].id %></span></div>
                   Created At: <span class="text-gray-400 relative"><%= created[i].created_at %></span><br>
@@ -47,7 +42,7 @@
                 </div></a>
                   <%}%>
               </div>
-              <div class="float-left sm:w-1/3 text-center w-full">
+              <div class="flex flex-grow flex-col sm:w-1/3 text-center w-full">
                 <div class="p-5 text-3xl bg-white relative ">Pending (<%= pending.length %>)</div>
                 <% for(let i=0; i<pending.length; i++){ %>
                   <a href="<%=pending[i].web_url%>" target="_blank"><div class="pending-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
@@ -57,7 +52,7 @@
                 </div></a>
                   <%}%> 
                 </div>
-              <div class="float-left sm:w-1/3 text-center w-full">
+              <div class="flex flex-grow flex-col sm:w-1/3 text-center w-full">
                 <div class="p-5 text-3xl bg-white relative ">Running (<%= running.length %>)</div>
                 <% for(let i=0; i<running.length; i++){ %>
                   <a href="<%=running[i].web_url%>" target="_blank"><div class="running-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
@@ -68,9 +63,6 @@
                 </div></a>
                   <%}%>
               </div>
-            </div>
-          </div>
-        </div>
       </div>
       <footer>
         <%- include('../partials/footer'); %>
