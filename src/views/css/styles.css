@@ -1,15 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-  
-  /* Clear floats after the columns */
 
-  .created-card{
-    box-shadow: inset 0.2rem 0 lightblue, 0 0.2rem #ddd;
-  }
-  .pending-card{
-    box-shadow: inset 0.2rem 0 #C96785, 0 0.2rem #ddd;
-  }
-  .running-card{
-    box-shadow: inset 0.2rem 0 #90C967, 0 0.2rem #ddd;
-  }
+/* Clear floats after the columns */
+
+.created-card {
+  box-shadow: inset 0.2rem 0 lightblue, 0 0.2rem #ddd;
+}
+.pending-card {
+  box-shadow: inset 0.2rem 0 #c96785, 0 0.2rem #ddd;
+}
+.running-card {
+  box-shadow: inset 0.2rem 0 #90c967, 0 0.2rem #ddd;
+}
