@@ -4,6 +4,7 @@ Usage:
 
 ```
 yarn
+yarn build-tailwindcss
 export API_TOKEN=your token
 node app.js
 ```

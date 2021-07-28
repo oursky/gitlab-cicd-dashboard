@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint `**/*.js` --ignore-pattern node_modules/",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "build-tailwindcss": "tailwindcss -i src/views/css/styles.css -o src/views/css/tailwind.css"
   },
   "dependencies": {
     "@oursky/eslint-plugin": "5.0.0",
@@ -27,6 +28,7 @@
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "postcss": "8.3.5",
-    "prettier": "2.3.2"
+    "prettier": "2.3.2",
+    "prettier-plugin-tailwind": "2.2.12"
   }
 }

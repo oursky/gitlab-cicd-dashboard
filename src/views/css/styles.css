@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Clear floats after the columns */
+
+.created-card {
+  box-shadow: inset 0.2rem 0 lightblue, 0 0.2rem #ddd;
+}
+.created-id {
+  @apply text-sky-300 font-bold;
+}
+.pending-card {
+  box-shadow: inset 0.2rem 0 #c96785, 0 0.2rem #ddd;
+}
+.pending-id {
+  @apply text-red-400 font-bold;
+}
+.running-card {
+  box-shadow: inset 0.2rem 0 #90c967, 0 0.2rem #ddd;
+}
+.running-id {
+  @apply text-green-300 font-bold;
+}
