@@ -1,0 +1,19 @@
+<% for(let i=0; i<running.length; i++){ %>
+    <a href="<%=running[i].web_url%>" target="_blank">
+      <div
+        class="running-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
+        <div class="relative">#<span class="text-green-300" style="font-weight:bold">
+            <%= running[i].id %>
+          </span></div>
+        Created At: <span class="text-gray-400 relative">
+          <%= running[i].created_at %>
+        </span><br>
+        Started At: <span class="text-gray-400 relative">
+          <%= running[i].started_at %>
+        </span><br>
+        tags: <span class="text-gray-400 relative">
+          <%= running[i].tag_list %>
+        </span>
+      </div>
+    </a>
+    <%}%>

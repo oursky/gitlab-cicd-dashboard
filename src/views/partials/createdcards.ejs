@@ -1,0 +1,16 @@
+<% for(let i=0; i<created.length; i++){ %>
+    <a href="<%= created[i].web_url %>" target="_blank">
+      <div
+        class="created-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
+        <div class="relative">#<span class="text-sky-300" style="font-weight:bold">
+            <%= created[i].id %>
+          </span></div>
+        Created At: <span class="text-gray-400 relative">
+          <%= created[i].created_at %>
+        </span><br>
+        tags: <span class="text-gray-400 relative">
+          <%= created[i].tag_list %>
+        </span>
+      </div>
+    </a>
+    <%}%>
