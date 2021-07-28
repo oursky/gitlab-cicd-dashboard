@@ -1,19 +1,17 @@
-<% for(let i=0; i<status.length; i++){ %>
-    <a href="<%=status[i].web_url%>" target="_blank">
-      <div
-        class="<%=status[i].status%>-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
-        <div class="relative">#<span class="<%=status[i].status%>-id">
-            <%= status[i].id %>
-          </span></div>
-        Created At: <span class="text-gray-400 relative">
-          <%= status[i].created_at %>
-        </span><br>
-        Started At: <span class="text-gray-400 relative">
-          <%= status[i].started_at %>
-        </span><br>
-        tags: <span class="text-gray-400 relative">
-          <%= status[i].tag_list %>
-        </span>
-      </div>
-    </a>
-    <%}%>
+<a href="<%=status[current].web_url%>" target="_blank">
+  <div
+    class="<%=status[current].status%>-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
+    <div class="relative">#<span class="<%=status[current].status%>-id">
+        <%= status[current].id %>
+      </span></div>
+    Created At: <span class="text-gray-400 relative">
+      <%= status[current].created_at %>
+    </span><br>
+    Started At: <span class="text-gray-400 relative">
+      <%= status[current].started_at %>
+    </span><br>
+    tags: <span class="text-gray-400 relative">
+      <%= status[current].tag_list %>
+    </span>
+  </div>
+</a>
