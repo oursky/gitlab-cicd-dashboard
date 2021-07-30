@@ -34,6 +34,9 @@ app.get("/redirect", (req, res) => {
     res.cookie(`access_token`, response.access_token, {maxAge: 86400000})
     res.redirect(`http://${host}:${port}/groups/${state}/jobs`)
   })
+  .catch(err => res.render("pages/error", {error: 
+  `Cannot obtain access token. ` +
+  `Please make sure Application ID, Application Secret, Redirect URL are valid`}))
 })
 
 app.get("/groups/:id/jobs", function (req, res) {
@@ -48,9 +51,14 @@ app.get("/groups/:id/jobs", function (req, res) {
       pending: data.filter((data) => data.status === "pending"),
       running: data.filter((data) => data.status === "running"),
     })
-  );
+  )
+  .catch(err => res.render("pages/error", {error: `Cannot obtain Jobs. Pleae make sure the group ID is valid and being authorized to access it.`}));
   }
 });
+
+app.get("/error", (req, res) => {
+  res.render("pages/error")
+})
 
 app.listen(port, () => {
   console.log(`listening at ${host}:${port}`);
