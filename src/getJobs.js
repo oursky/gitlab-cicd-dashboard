@@ -1,7 +1,8 @@
 const gitlabAPI = require("./gitlabAPI");
-const apiToken = process.env.API_TOKEN;
 
-module.exports.getJobs = function getJobs(requestedGroupID) {
+
+module.exports.getJobs = function getJobs(requestedGroupID, token) {
+  const apiToken = token;
   const groupID = requestedGroupID;
   const getProjectSearchParams = new URLSearchParams("");
   getProjectSearchParams.append("order_by", "last_activity_at");
