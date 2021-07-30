@@ -29,7 +29,6 @@ app.get("/redirect", (req, res) => {
   state = req.query.state
   getToken.getToken(AppID, code, APP_SECRET)
   .then(response => {
-    //res.render("pages/redirect", {Token: JSON.stringify(Token)})
     res.cookie(`access_token`, response.access_token, {maxAge: 86400000})
     res.redirect(`${url}/groups/${state}/jobs`)
   })
@@ -47,7 +46,6 @@ app.get("/groups/:id/jobs", function (req, res) {
       running: data.filter((data) => data.status === "running"),
     })
   );
-  // .then((data) => console.log((data[0]).map(({status, ...rest})=> [status[1], rest])));
 });
 
 app.listen(port, () => {
