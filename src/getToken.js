@@ -18,8 +18,5 @@ return fetch(
         `&client_secret=${clientSecret}` +
         `&redirect_uri=http://localhost:8081/redirect`, params )
   .then(response => response.json())
-//   .then(result => {
-//       return result
-//  })
-  .catch(error => console.log('error', error));
+  .catch(err => console.log(err));
 }
