@@ -1,6 +1,4 @@
 const fetch = require("node-fetch");
-//var request = require('request');
-//const fs = require('fs')
 
 exports.getToken = function getToken(clientId, code, clientSecret) {
 
