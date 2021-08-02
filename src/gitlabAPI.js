@@ -9,8 +9,7 @@ exports.getProjectsByGroupID = function getProjectsByGroupID(
     `https://gitlab.com/api/v4/groups/${groupID}/projects?${searchParam}`,
     {
       headers: {
-        "Authorization": "Bearer "+ key,
-        
+        Authorization: "Bearer " + key,
       },
     }
   );
@@ -23,8 +22,7 @@ exports.getProjectsByGroupID = function getProjectsByGroupID(
 exports.getJobsByProjectID = function getJobsByProjectID(key, projectID) {
   const jobs = fetch(`https://gitlab.com/api/v4/projects/${projectID}/jobs`, {
     headers: {
-      "Authorization": "Bearer "+ key,
-
+      Authorization: "Bearer " + key,
     },
   });
   return jobs.then((response) => {

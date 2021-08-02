@@ -1,6 +1,5 @@
 const gitlabAPI = require("./gitlabAPI");
 
-
 module.exports.getJobs = function getJobs(requestedGroupID, token) {
   const apiToken = token;
   const groupID = requestedGroupID;
@@ -10,7 +9,7 @@ module.exports.getJobs = function getJobs(requestedGroupID, token) {
   console.log(`Getting jobs of group: ${groupID}`);
   return gitlabAPI
     .getProjectsByGroupID(apiToken, groupID, getProjectSearchParams)
-    
+
     .then((projects) => {
       const ids = projects.map((project) => project.id);
       return ids;
