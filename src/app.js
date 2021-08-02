@@ -12,6 +12,7 @@ const path = require("path");
 // const APP_SECRET = "1bb0b4cf625557ee3260a756dc63bbc8544247dacd0685513fd9cf87e7f66afb";
 
 app.use(express.static(path.join(__dirname)));
+app.set('views', __dirname+'/views')
 
 app.set("view engine", "ejs");
 
