@@ -1,10 +1,9 @@
 const getJobs = require("./getJobs");
 const getToken = require("./getToken");
-const getCookie = require("./getCookie");
 const express = require("express");
 const app = express();
 const config = require("./config");
-const { host, port, AppID, APP_SECRET, redirect_url, cookieAge } = config;
+const { port, origin, AppID, APP_SECRET, redirect_url, cookieAge } = config;
 const path = require("path");
 var cookieParser = require("cookie-parser");
 
@@ -19,7 +18,7 @@ app.get("/redirect/:state", (req, res) => {
   res.redirect(
     `https://gitlab.com/oauth/authorize?` +
       `&client_id=${AppID}` +
-      `&redirect_uri=${host}/redirect` +
+      `&redirect_uri=${origin}/redirect` +
       `&response_type=code` +
       `&state=${req.params.state}` +
       `&scope=profile+read_api`
@@ -33,7 +32,7 @@ app.get("/redirect", (req, res) => {
     .getToken(AppID, code, APP_SECRET, redirect_url)
     .then((response) => {
       res.cookie(`access_token`, response.access_token, { maxAge: cookieAge });
-      res.redirect(`${host}${state}`);
+      res.redirect(`${origin}${state}`);
     })
     .catch((err) =>
       res.render("pages/error", {
@@ -49,7 +48,7 @@ app.get("/groups/:id/jobs", function (req, res) {
     req.cookies.access_token === "" ||
     req.cookies.access_token === undefined
   ) {
-    res.redirect(`${host}/redirect/` + encodeURIComponent(req.originalUrl));
+    res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
   }
   getJobs
@@ -73,5 +72,5 @@ app.get("/error", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`listening at ${host}`);
+  console.log(`listening at ${origin}`);
 });
