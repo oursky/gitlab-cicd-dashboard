@@ -5,6 +5,7 @@ Usage:
 ```
 yarn
 yarn build-tailwindcss
+export APP_SECRET = <APP SECRET>
 node src/app.js
 ```
 
