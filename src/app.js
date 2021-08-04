@@ -4,13 +4,16 @@ const getCookie = require("./getCookie");
 const express = require("express");
 const app = express();
 const config = require("./config");
-const { host, port, AppID, APP_SECRET, redirect_url } = config;
+const { host, port, AppID, APP_SECRET, redirect_url, cookieAge } = config;
 const path = require("path");
+var cookieParser = require("cookie-parser");
 
 app.use(express.static(path.join(__dirname)));
 app.set("views", __dirname + "/views");
 
 app.set("view engine", "ejs");
+
+app.use(cookieParser());
 
 app.get("/redirect/:state", (req, res) => {
   res.redirect(
@@ -29,8 +32,8 @@ app.get("/redirect", (req, res) => {
   getToken
     .getToken(AppID, code, APP_SECRET, redirect_url)
     .then((response) => {
-      res.cookie(`access_token`, response.access_token, { maxAge: 86400000 });
-      res.redirect(`${host}/${state}`);
+      res.cookie(`access_token`, response.access_token, { maxAge: cookieAge });
+      res.redirect(`${host}${state}`);
     })
     .catch((err) =>
       res.render("pages/error", {
@@ -42,24 +45,27 @@ app.get("/redirect", (req, res) => {
 });
 
 app.get("/groups/:id/jobs", function (req, res) {
-  const Token = getCookie.getCookie(req);
-  if (!Token) res.redirect(`${host}/redirect/${req.originalURL}`);
-  {
-    getJobs
-      .getJobs(req.params.id, Token)
-      .then((data) =>
-        res.render("pages/index", {
-          created: data.filter((data) => data.status === "created"),
-          pending: data.filter((data) => data.status === "pending"),
-          running: data.filter((data) => data.status === "running"),
-        })
-      )
-      .catch((err) =>
-        res.render("pages/error", {
-          error: `Cannot obtain Jobs. Pleae make sure the group ID is valid and being authorized to access it.`,
-        })
-      );
+  if (
+    req.cookies.access_token === "" ||
+    req.cookies.access_token === undefined
+  ) {
+    res.redirect(`${host}/redirect/` + encodeURIComponent(req.originalUrl));
+    return;
   }
+  getJobs
+    .getJobs(req.params.id, req.cookies.access_token)
+    .then((data) =>
+      res.render("pages/index", {
+        created: data.filter((data) => data.status === "created"),
+        pending: data.filter((data) => data.status === "pending"),
+        running: data.filter((data) => data.status === "running"),
+      })
+    )
+    .catch((err) =>
+      res.render("pages/error", {
+        error: `Cannot obtain Jobs. Pleae make sure the group ID is valid and being authorized to access it.`,
+      })
+    );
 });
 
 app.get("/error", (req, res) => {
