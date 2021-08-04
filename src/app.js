@@ -12,13 +12,13 @@ app.set("views", __dirname + "/views");
 
 app.set("view engine", "ejs");
 
-app.get("/redirect/:id", (req, res) => {
+app.get("/redirect/:state", (req, res) => {
   res.redirect(
     `https://gitlab.com/oauth/authorize?` +
       `&client_id=${AppID}` +
       `&redirect_uri=${host}/redirect` +
       `&response_type=code` +
-      `&state=${req.params.id}` +
+      `&state=${req.params.state}` +
       `&scope=profile+read_api`
   );
 });
@@ -30,7 +30,7 @@ app.get("/redirect", (req, res) => {
     .getToken(AppID, code, APP_SECRET, redirect_url)
     .then((response) => {
       res.cookie(`access_token`, response.access_token, { maxAge: 86400000 });
-      res.redirect(`${host}/groups/${state}/jobs`);
+      res.redirect(`${host}/${state}`);
     })
     .catch((err) =>
       res.render("pages/error", {
@@ -43,9 +43,8 @@ app.get("/redirect", (req, res) => {
 
 app.get("/groups/:id/jobs", function (req, res) {
   const Token = getCookie.getCookie(req);
-  if (!Token) {
-    res.redirect(`${host}/redirect/${req.params.id}`);
-  } else {
+  if (!Token) res.redirect(`${host}/redirect/${req.originalURL}`);
+  {
     getJobs
       .getJobs(req.params.id, Token)
       .then((data) =>
