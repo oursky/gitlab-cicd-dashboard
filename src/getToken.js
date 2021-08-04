@@ -1,6 +1,11 @@
 const fetch = require("node-fetch");
 
-exports.getToken = function getToken(clientId, code, clientSecret, redirect_url) {
+exports.getToken = function getToken(
+  clientId,
+  code,
+  clientSecret,
+  redirect_url
+) {
   var params = {
     method: "POST",
     headers: {
