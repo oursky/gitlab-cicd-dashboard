@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const url = require("url").URL;
+const URL = require("url").URL;
 const cookieParser = require("cookie-parser");
 const getJobs = require("./getJobs");
 const getToken = require("./getToken");
@@ -11,7 +11,7 @@ const config = require("./config");
 const app = express();
 
 const { origin, AppID, APP_SECRET, redirect_url, cookieAge } = config;
-const port = new url(origin).port;
+const port = new URL(origin).port;
 
 app.use(express.static(path.join(__dirname)));
 app.set("views", __dirname + "/views");
