@@ -1,11 +1,17 @@
+const express = require("express");
+const path = require("path");
+const url = require("url").URL;
+const cookieParser = require("cookie-parser");
 const getJobs = require("./getJobs");
 const getToken = require("./getToken");
-const express = require("express");
-const app = express();
+
+require("dotenv").config();
 const config = require("./config");
-const { port, origin, AppID, APP_SECRET, redirect_url, cookieAge } = config;
-const path = require("path");
-var cookieParser = require("cookie-parser");
+
+const app = express();
+
+const { origin, AppID, APP_SECRET, redirect_url, cookieAge } = config;
+const port = new url(origin).port;
 
 app.use(express.static(path.join(__dirname)));
 app.set("views", __dirname + "/views");
@@ -26,8 +32,8 @@ app.get("/redirect/:state", (req, res) => {
 });
 
 app.get("/redirect", (req, res) => {
-  code = req.query.code;
-  state = req.query.state;
+  const code = req.query.code;
+  const state = req.query.state;
   getToken
     .getToken(AppID, code, APP_SECRET, redirect_url)
     .then((response) => {
@@ -44,10 +50,7 @@ app.get("/redirect", (req, res) => {
 });
 
 app.get("/groups/:id/jobs", function (req, res) {
-  if (
-    req.cookies.access_token === "" ||
-    req.cookies.access_token === undefined
-  ) {
+  if (req.cookies.access_token === "" || req.cookies.access_token === null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
   }
