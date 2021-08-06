@@ -50,7 +50,7 @@ app.get("/redirect", (req, res) => {
 });
 
 app.get("/groups/:id/jobs", function (req, res) {
-  if (req.cookies.access_token === "" || req.cookies.access_token === null) {
+  if (req.cookies.access_token === "" || req.cookies.access_token == null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
   }
