@@ -13,6 +13,9 @@ const app = express();
 const { origin, AppID, APP_SECRET, redirect_url, cookieAge } = config;
 if([origin, AppID, APP_SECRET, redirect_url, cookieAge].includes("")){
   console.log("[WARNING] config.js has at least one empty property.")
+if ([origin, AppID, APP_SECRET, redirect_url, cookieAge].includes("")) {
+  console.warn("[WARNING] config.js has at least one empty property.");
+}
 }
 const port = new URL(origin).port;
 
