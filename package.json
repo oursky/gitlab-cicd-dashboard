@@ -15,6 +15,7 @@
     "ejs": "3.1.6",
     "eslint": "7.31.0",
     "express": "4.17.1",
+    "mongoose": "5.13.5",
     "node-fetch": "2.6.1",
     "postcss-import": "14.0.2",
     "tailwindcss": "2.2.6"
