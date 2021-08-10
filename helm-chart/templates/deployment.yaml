@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.service.name }}
+  namespace: {{ .Values.deployment.namespace }}
+  labels:
+    app: {{ .Values.service.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.service.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.service.name }}
+    spec:
+      containers:
+        - name: {{ .Values.service.name }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          env:
+            - name: APP_ID
+              value: "{{ .Values.deployment.env.APP_ID }}"
+            - name: APP_SECRET
+              value: "{{ .Values.deployment.env.APP_SECRET }}"
+            - name: APP_ORIGIN
+              value: "{{ .Values.deployment.env.APP_ORIGIN }}"
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
