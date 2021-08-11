@@ -2,17 +2,17 @@ FROM node:12.20.0
 
 WORKDIR /usr/src/app
 COPY package*.json ./ 
-
-ENV COOKIE_AGE=86400000
+COPY yarn.lock ./ 
 
 RUN yarn
 
-COPY yarn.lock ./ 
 COPY src/views/css/styles.css src/views/css/
 
 RUN yarn build-tailwindcss
 
 COPY . .
+
+ENV COOKIE_AGE=86400000
 
 EXPOSE 8081
 
