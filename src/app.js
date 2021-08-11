@@ -11,12 +11,8 @@ const config = require("./config");
 
 const app = express();
 
-const { origin, AppID, APP_SECRET, redirect_url, cookieAge, DB_URL } = config;
 if ([origin, AppID, APP_SECRET, redirect_url, cookieAge].includes("")) {
   console.warn("[WARNING] config.js has at least one empty property.");
-}
-if (!DB_URL) {
-  console.log("[INFO] DB_URL is not provided, the session will not be logged.");
 }
 
 app.use(express.static(path.join(__dirname)));
