@@ -10,7 +10,10 @@ const config = require("./config");
 
 const app = express();
 
-const { origin, AppID, APP_SECRET, redirect_url, cookieAge } = config;
+if ([origin, AppID, APP_SECRET, redirect_url, cookieAge].includes("")) {
+  console.warn("[WARNING] config.js has at least one empty property.");
+}
+}
 const port = new URL(origin).port;
 
 app.use(express.static(path.join(__dirname)));
@@ -50,7 +53,7 @@ app.get("/redirect", (req, res) => {
 });
 
 app.get("/groups/:id/jobs", function (req, res) {
-  if (req.cookies.access_token === "" || req.cookies.access_token === null) {
+  if (req.cookies.access_token === "" || req.cookies.access_token == null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
   }

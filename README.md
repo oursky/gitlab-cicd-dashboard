@@ -2,6 +2,9 @@
 
 Usage:
 
+1) Create a .env file
+2) Add required lines and values (See .env-example)
+
 ```
 yarn
 yarn build-tailwindcss
