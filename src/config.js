@@ -4,6 +4,7 @@ const config = {
   APP_SECRET: `${process.env.APP_SECRET}`,
   redirect_url: `${process.env.APP_ORIGIN}/redirect`,
   cookieAge: `${process.env.COOKIE_AGE}`,
+  DB_URL: `${process.env.DB_URL}`,
 };
 
 module.exports = config;

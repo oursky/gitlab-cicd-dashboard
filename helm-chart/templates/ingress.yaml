@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Values.service.name }}
+  namespace: {{ .Values.deployment.namespace }}
+  annotations:
+    # add this if you need automatic Let’s Encrypt cert
+    # works only if the k8s cluster has installed cert-manager
+    # e.g. k8s.oursky.app and k8s.pandawork.com
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ .Values.service.name }}
+              servicePort: 80
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      # secretName is required
+      # cert and key will be saved into this secret,
+      # you don't actually need to create a cert/key in demo-api,
+      # a new one will be generated and saved here for you
+      # if you enable auto Let’s Encrypt cert with kubernetes.io/tls-acme
+      # annotations
+      secretName: {{ .Values.ingress.host }}
