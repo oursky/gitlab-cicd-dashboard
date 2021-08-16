@@ -8,6 +8,7 @@ const getToken = require("./getToken");
 
 require("dotenv").config();
 const config = require("./config");
+const { origin, AppID, APP_SECRET, redirect_url, cookieAge , DB_URL} = config;
 
 const app = express();
 
