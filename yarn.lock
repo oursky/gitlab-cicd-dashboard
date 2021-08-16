@@ -1946,7 +1946,7 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
-mongoose@^5.13.5:
+mongoose@5.13.5:
   version "5.13.5"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.13.5.tgz#9c8c0b46d35116dd4ea47683dfa836137e475243"
   integrity sha512-sSUAk9GWgA8r3w3nVNrNjBaDem86aevwXO8ltDMKzCf+rjnteMMQkXHQdn1ePkt7alROEPZYCAjiRjptWRSPiQ==
@@ -2752,6 +2752,11 @@ sprintf-js@~1.0.2:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+
+stopwatch-node@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/stopwatch-node/-/stopwatch-node-1.1.0.tgz#3949bb4c53f15f704a05a33b9a9dece2354e1cfa"
+  integrity sha512-TpRTztFjiq/B5wn84oKK0YHHtprgrC8pLOUkqVU+MN+2DgdBMaEIeSyGeAn2n+7mT9zrfJyhM33Yw4j/rRV2Bg==
 
 string-width@^4.2.0:
   version "4.2.2"
