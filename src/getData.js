@@ -21,7 +21,7 @@ module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
     })
 };
 
-module.exports.getJobs = function getJobs(requestedGroupID, projectIDs, token){
+module.exports.getJobs = function getJobs(requestedGroupID, token, projectIDs){
   const jobPromises = projectIDs.map((projectID) =>
     gitlabAPI.getJobsByProjectID(token, projectID)
   )
@@ -40,27 +40,33 @@ module.exports.getJobs = function getJobs(requestedGroupID, projectIDs, token){
         return true;
       }
     });
-    // console.log(outputJobs)
-    // jobsCache.set(`${groupID}`, "1", 30)
     jobsCache.set(`${requestedGroupID}`, outputJobs, 30);
     return outputJobs;
   });
 }
 
-module.exports.getCachedProjectIDs = function getCachedProjectIDs(requestedGroupID, token) {
-const projectIDs = projectIDsCache.get(`${requestedGroupID}`)
-  if(projectIDs != null){
-    return new Promise((resolve, reject) => 
-    resolve(projectIDs))
-  }
-  return this.getProjectIDs(requestedGroupID, token)
-}
+// module.exports.getCachedProjectIDs = function getCachedProjectIDs(requestedGroupID, token) {
+// const projectIDs = projectIDsCache.get(`${requestedGroupID}`)
+//   if(projectIDs != null){
+//     return new Promise((resolve, reject) => 
+//     resolve(projectIDs))
+//   }
+//   return this.getProjectIDs(requestedGroupID, token)
+// }
 
-module.exports.getCachedJobs = function getCachedJobs(requestedGroupID, projectIDs, token) {
-  const jobs = jobsCache.get(`${requestedGroupID}`)
-    if(jobs != null){
-      return new Promise((resolve, reject) => 
-      resolve(jobs))
-    }
-    return this.getJobs(requestedGroupID, projectIDs, token)
-  }
+// module.exports.getCachedJobs = function getCachedJobs(requestedGroupID, token, projectIDs) {
+//   const jobs = jobsCache.get(`${requestedGroupID}`)
+//     if(jobs != null){
+//       return new Promise((resolve, reject) => 
+//       resolve(jobs))
+//     }
+//     return this.getJobs(requestedGroupID, projectIDs, token)
+//   }
+
+module.exports.getCachedData = function getCachedData(callback, requestedGroupID, token, projectIDs){
+  var neededCache
+  if(callback == this.getJobs){var neededCache = jobsCache.get(`${requestedGroupID}`)}
+  if(callback == this.getProjectIDs){var neededCache = projectIDsCache.get(`${requestedGroupID}`)}
+  if(neededCache != null){return new Promise((resolve, reject) => resolve(neededCache))}
+  return callback(requestedGroupID, token, projectIDs)
+}
