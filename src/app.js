@@ -79,10 +79,10 @@ app.get("/groups/:id/jobs", function (req, res) {
   // }
 
   getData
-    .getCachedProjectIDs(req.params.id, req.cookies.access_token)
+    .getCachedData(getData.getProjectIDs, req.params.id, req.cookies.access_token)
     .then((projectIDs) => {
       //ADD Projects to CACHE
-      return getData.getCachedJobs(req.params.id, projectIDs, req.cookies.access_token)
+      return getData.getCachedData(getData.getJobs, req.params.id, req.cookies.access_token, projectIDs)
     })
     .then((data) =>{
       //ADD req.cookies + groupID to cache
