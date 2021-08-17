@@ -14,7 +14,8 @@ node src/app.js
 If using docker:
 
 1. Add required ENV values to dockerfile
-    e.g. ENV APP_ID=<APP ID> (See .env-example)
+   e.g. ENV APP_ID=<APP ID> (See .env-example)
+
 ```
 docker build -t gitlab-cicd-dashboard .
 docker-compose up
@@ -23,5 +24,3 @@ docker-compose up
 Browser:
 
 http://localhost:8081/groups/groupID/jobs
-
-

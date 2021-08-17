@@ -8,7 +8,7 @@ const getToken = require("./getToken");
 
 require("dotenv").config();
 const config = require("./config");
-const { origin, AppID, APP_SECRET, redirect_url, cookieAge , DB_URL} = config;
+const { origin, AppID, APP_SECRET, redirect_url, cookieAge, DB_URL } = config;
 
 const app = express();
 
@@ -70,7 +70,7 @@ app.get("/groups/:id/jobs", function (req, res) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
   }
-  
+
   // if (!DB_URL) {
   //   const newLog = new LogItem({
   //     request: encodeURIComponent(req.originalUrl),
@@ -79,25 +79,34 @@ app.get("/groups/:id/jobs", function (req, res) {
   // }
 
   getData
-    .getCachedData(getData.getProjectIDs, req.params.id, req.cookies.access_token)
+    .getCachedData(
+      getData.getProjectIDs,
+      req.params.id,
+      req.cookies.access_token
+    )
     .then((projectIDs) => {
       //ADD Projects to CACHE
-      return getData.getCachedData(getData.getJobs, req.params.id, req.cookies.access_token, projectIDs)
+      return getData.getCachedData(
+        getData.getJobs,
+        req.params.id,
+        req.cookies.access_token,
+        projectIDs
+      );
     })
-    .then((data) =>{
+    .then((data) => {
       //ADD req.cookies + groupID to cache
       //ADD Jobs to CACHE
       res.render("pages/index", {
         created: data.filter((data) => data.status === "created"),
         pending: data.filter((data) => data.status === "pending"),
         running: data.filter((data) => data.status === "running"),
-      })
+      });
     })
-    .catch((err) =>{
-      console.log(err)
+    .catch((err) => {
+      console.log(err);
       res.render("pages/error", {
         error: `Cannot obtain Jobs. Pleae make sure the group ID is valid and being authorized to access it.`,
-      })
+      });
     });
 });
 
