@@ -96,8 +96,6 @@ app.get("/groups/:id/jobs", function (req, res) {
       return getJobs(req.params.id, req.cookies.access_token, projectIDs);
     })
     .then((data) => {
-      //ADD req.cookies + groupID to cache
-      //ADD Jobs to CACHE
       res.render("pages/index", {
         created: data.filter((data) => data.status === "created"),
         pending: data.filter((data) => data.status === "pending"),
