@@ -1,7 +1,4 @@
 const gitlabAPI = require("./gitlabAPI");
-const NodeCache = require("node-cache");
-const projectIDsCache = new NodeCache();
-const jobsCache = new NodeCache();
 
 module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
   const apiToken = token;
@@ -16,7 +13,7 @@ module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
 
     .then((projects) => {
       const ids = projects.map((project) => project.id);
-      projectIDsCache.set(`${groupID}`, ids, 1800);
+
       return ids;
     });
 };
@@ -39,44 +36,20 @@ module.exports.getJobs = function getJobs(requestedGroupID, token, projectIDs) {
         return true;
       }
     });
-    jobsCache.set(`${requestedGroupID}`, outputJobs, 30);
     return outputJobs;
   });
 };
 
-// module.exports.getCachedProjectIDs = function getCachedProjectIDs(requestedGroupID, token) {
-// const projectIDs = projectIDsCache.get(`${requestedGroupID}`)
-//   if(projectIDs != null){
-//     return new Promise((resolve, reject) =>
-//     resolve(projectIDs))
-//   }
-//   return this.getProjectIDs(requestedGroupID, token)
-// }
-
-// module.exports.getCachedJobs = function getCachedJobs(requestedGroupID, token, projectIDs) {
-//   const jobs = jobsCache.get(`${requestedGroupID}`)
-//     if(jobs != null){
-//       return new Promise((resolve, reject) =>
-//       resolve(jobs))
-//     }
-//     return this.getJobs(requestedGroupID, projectIDs, token)
-//   }
-
-module.exports.getCachedData = function getCachedData(
-  callback,
-  requestedGroupID,
-  token,
-  projectIDs
-) {
-  var neededCache;
-  if (callback == this.getJobs) {
-    var neededCache = jobsCache.get(`${requestedGroupID}`);
-  }
-  if (callback == this.getProjectIDs) {
-    var neededCache = projectIDsCache.get(`${requestedGroupID}`);
-  }
+module.exports.withCache = function withCache(callback, options) {
+  //var cacheKey = JSON.stringify(args)
+  var neededCache = options.cacheStorage.get(`${cacheKey}`);
   if (neededCache != null) {
     return new Promise((resolve, reject) => resolve(neededCache));
   }
-  return callback(requestedGroupID, token, projectIDs);
+  return (...args) => {
+    return callback(...args).then((data) => {
+      options.cacheStorage.set(`${cacheKey}`, data, options.ttl);
+      return data;
+    });
+  };
 };
