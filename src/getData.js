@@ -19,8 +19,8 @@ module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
 };
 
 module.exports.getJobs = function getJobs(requestedGroupID, token, projectIDs) {
-  const jobPromises = projectIDs.map((projectID) =>
-    gitlabAPI.getJobsByProjectID(token, projectID)
+  const jobPromises = projectIDs.map((projectID) =>  
+  gitlabAPI.getJobsByProjectID(token, projectID)
   );
   return Promise.all(jobPromises).then((data) => {
     const flattenedJobArray = data.flat();
@@ -38,18 +38,4 @@ module.exports.getJobs = function getJobs(requestedGroupID, token, projectIDs) {
     });
     return outputJobs;
   });
-};
-
-module.exports.withCache = function withCache(callback, options) {
-  //var cacheKey = JSON.stringify(args)
-  var neededCache = options.cacheStorage.get(`${cacheKey}`);
-  if (neededCache != null) {
-    return new Promise((resolve, reject) => resolve(neededCache));
-  }
-  return (...args) => {
-    return callback(...args).then((data) => {
-      options.cacheStorage.set(`${cacheKey}`, data, options.ttl);
-      return data;
-    });
-  };
 };
