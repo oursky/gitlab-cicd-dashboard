@@ -24,3 +24,6 @@ docker-compose up
 Browser:
 
 http://localhost:8081/groups/groupID/jobs
+
+Oursky's jobs:
+https://gitlab-cicd-dashboard.pandawork.com
