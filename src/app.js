@@ -5,6 +5,10 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const getData = require("./getData");
 const getToken = require("./getToken");
+const NodeCache = require("node-cache");
+const withCache = require("./withCache");
+const projectIDsCache = new NodeCache();
+const jobsCache = new NodeCache();
 
 require("dotenv").config();
 const config = require("./config");
@@ -71,27 +75,25 @@ app.get("/groups/:id/jobs", function (req, res) {
     return;
   }
 
-  // if (!DB_URL) {
-  //   const newLog = new LogItem({
-  //     request: encodeURIComponent(req.originalUrl),
-  //   });
-  //   newLog.save().then((log) => console.log(log));
-  // }
+  if (!DB_URL) {
+    const newLog = new LogItem({
+      request: encodeURIComponent(req.originalUrl),
+    });
+    newLog.save().then((log) => console.log(log));
+  }
 
-  getData
-    .getCachedData(
-      getData.getProjectIDs,
-      req.params.id,
-      req.cookies.access_token
-    )
+  const getProjectIDs = withCache(getData.getProjectIDs, {
+    cacheStorage: projectIDsCache,
+    ttl: 1800,
+  });
+  const getJobs = withCache(getData.getJobs, {
+    cacheStorage: jobsCache,
+    ttl: 30,
+  });
+
+  getProjectIDs(req.params.id, req.cookies.access_token)
     .then((projectIDs) => {
-      //ADD Projects to CACHE
-      return getData.getCachedData(
-        getData.getJobs,
-        req.params.id,
-        req.cookies.access_token,
-        projectIDs
-      );
+      return getJobs(req.params.id, req.cookies.access_token, projectIDs);
     })
     .then((data) => {
       //ADD req.cookies + groupID to cache
