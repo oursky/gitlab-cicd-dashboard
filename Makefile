@@ -12,4 +12,4 @@ test:
 build-image:
 	yarn
 	yarn build-tailwindcss
-	docker build --platform amd64 -t $(APP_NAME) .
+	docker build -t $(APP_NAME) .
