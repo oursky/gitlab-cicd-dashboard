@@ -9,7 +9,7 @@ deployment:
     repository: "docker.io/cmdryan/gitlab-cicd-dashboard"
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: $(GIT_HASH)
+    tag: "latest"
   env:
     APP_ID: __APP_ID__
     APP_ORIGIN: "https://gitlab-cicd-dashboard.pandawork.com"
