@@ -26,4 +26,4 @@ Browser:
 http://localhost:8081/groups/groupID/jobs
 
 Oursky's jobs:
-https://gitlab-cicd-dashboard.pandawork.com
+https://gitlab-cicd-dashboard.pandawork.com/groups/794774/jobs
