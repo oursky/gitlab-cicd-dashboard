@@ -21,24 +21,27 @@
       class="flex my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Created (<span id="created-length"><%= created.length %></span>)</div>
-        <% for(let i=0; i<created.length; i++){ %>
-          <%- include('../partials/jobCard', {job: created, current: i}) %>
-        <%}%>
-        <div id="created"></div>
+        <div id="created">
+          <% for(let i=0; i<created.length; i++){ %>
+            <%- include('../partials/jobCard', {job: created, current: i}) %>
+          <%}%>
+        </div>
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Pending (<span id="pending-length"><%= pending.length %></span>)</div>
-        <% for(let i=0; i<pending.length; i++){ %>
-          <%- include('../partials/jobCard', {job: pending, current: i}) %>
-        <%}%>
-        <div id="pending"></div>
+        <div id="pending">
+          <% for(let i=0; i<pending.length; i++){ %>
+            <%- include('../partials/jobCard', {job: pending, current: i}) %>
+          <%}%>
+        </div>
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Running (<span id="running-length"><%= running.length %></span>)</div>
-        <% for(let i=0; i<running.length; i++){ %>
-          <%- include('../partials/jobCard', {job: running, current: i}) %>
-        <%}%>
-        <div id="running"></div>
+        <div id="running">
+          <% for(let i=0; i<running.length; i++){ %>
+            <%- include('../partials/jobCard', {job: running, current: i}) %>
+          <%}%>
+        </div>
       </div>
     </div>
     <footer>
@@ -51,7 +54,8 @@
       const urlOrigin = window.location.origin
       const urlPathname = window.location.pathname
       xhttp.onload = function(){
-        const jobsArr = JSON.parse(this.response)
+        document.getElementById(columnName).innerHTML = "";
+        const jobsArr = JSON.parse(this.response);
         document.getElementById(columnName).innerHTML = jobsArr.join("");
         document.getElementById(`${columnName}-length`).innerHTML = jobsArr.length;
       }
@@ -60,8 +64,23 @@
     }
     </script>
     <script>
+      var userIsActive = true
+      var timeout;
+      window.onload = userActive;
+      document.onmousemove = userActive;
+      function userActive(){
+        clearTimeout(setTimeout(timeout));
+        timeout = setTimeout(()=>userIsActive = false, 30000) 
+        userIsActive = true
+        return userIsActive
+      }
+   </script>
+    <script>
       function autoUpdate(){
         setInterval(() => {
+          if(!userIsActive){
+            return
+          }
           reloadCol(`running`);
           reloadCol(`pending`);
           reloadCol(`created`);
