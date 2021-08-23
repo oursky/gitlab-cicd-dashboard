@@ -81,10 +81,11 @@
           if(!userIsActive){
             return
           }
+          console.log("test")
           reloadCol(`running`);
           reloadCol(`pending`);
           reloadCol(`created`);
-        }, 5000);
+        }, `<%= cache_timeout %>`);
       }
       autoUpdate();
     </script>
