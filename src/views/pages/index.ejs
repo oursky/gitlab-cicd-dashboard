@@ -51,15 +51,15 @@
   <script>
     function reloadCol(columnName) {
       const xhttp = new XMLHttpRequest();
-      const urlOrigin = window.location.origin
-      const urlPathname = window.location.pathname
+      const url = new URL(`/api`+window.location.pathname, window.location.origin)
+      url.searchParams.append(`status`,columnName)
       xhttp.onload = function(){
         document.getElementById(columnName).innerHTML = "";
         const jobsArr = JSON.parse(this.response);
         document.getElementById(columnName).innerHTML = jobsArr.join("");
         document.getElementById(`${columnName}-length`).innerHTML = jobsArr.length;
       }
-      xhttp.open("GET", `${urlOrigin}/api${urlPathname}?status=${columnName}`);
+      xhttp.open("GET", url);
       xhttp.send();
     }
     </script>
