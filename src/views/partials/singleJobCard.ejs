@@ -1,17 +1,17 @@
-<a href="<%=status.web_url%>" target="_blank">
+<a href="<%=job.web_url%>" target="_blank">
     <div
-      class="<%=status.status%>-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
-      <div class="relative">#<span class="<%=status.status%>-id">
-          <%= status.id %>
+      class="<%=job.status%>-card sm:p-5 sm:h-26 p-1 min-h-0 w-auto border-solid border-1 text-gray-400 bg-gray-50 transition duration-200 ease-in-out transform hover:scale-110">
+      <div class="relative">#<span class="<%=job.status%>-id">
+          <%= job.id %>
         </span></div>
       Created At: <span class="text-gray-400 relative">
-        <%= status.created_at %>
+        <%= job.created_at %>
       </span><br>
       Started At: <span class="text-gray-400 relative">
-        <%= status.started_at %>
+        <%= job.started_at %>
       </span><br>
       tags: <span class="text-gray-400 relative">
-        <%= status.tag_list %>
+        <%= job.tag_list %>
       </span>
     </div>
   </a>

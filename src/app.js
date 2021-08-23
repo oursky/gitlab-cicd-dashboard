@@ -36,7 +36,7 @@ const getProjectIDs = withCache(getData.getProjectIDs, {
 });
 const getJobs = withCache(getData.getJobs, {
   cacheStorage: jobsCache,
-  ttl: 30,
+  ttl: 5,
 });
 
 if (!DB_URL) {
@@ -101,6 +101,9 @@ app.get("/groups/:id/jobs", function (req, res) {
     })
     .then((data) => {
       res.render("pages/index", {
+        created: data.filter((data) => data.status === "created"),
+        pending: data.filter((data) => data.status === "pending"),
+        running: data.filter((data) => data.status === "running"),
         origin: origin,
       });
     })
@@ -129,7 +132,7 @@ app.get("/api/groups/:id", (req, res) => {
       const cardTemplate = ejs.compile(
         read("src/views/partials/singleJobCard.ejs", "utf-8")
       );
-      res.send(filteredJobs.map((job) => cardTemplate({ status: job })));
+      res.send(filteredJobs.map((job) => cardTemplate({ job: job })));
     });
 });
 
