@@ -3,11 +3,16 @@ const path = require("path");
 const URL = require("url").URL;
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-const getJobs = require("./getJobs");
+const getData = require("./getData");
 const getToken = require("./getToken");
+const NodeCache = require("node-cache");
+const withCache = require("./withCache");
+const projectIDsCache = new NodeCache();
+const jobsCache = new NodeCache();
 
 require("dotenv").config();
 const config = require("./config");
+const { origin, AppID, APP_SECRET, redirect_url, cookieAge, DB_URL } = config;
 
 const app = express();
 
@@ -77,20 +82,32 @@ app.get("/groups/:id/jobs", function (req, res) {
     newLog.save().then((log) => console.log(log));
   }
 
-  getJobs
-    .getJobs(req.params.id, req.cookies.access_token)
-    .then((data) =>
+  const getProjectIDs = withCache(getData.getProjectIDs, {
+    cacheStorage: projectIDsCache,
+    ttl: 1800,
+  });
+  const getJobs = withCache(getData.getJobs, {
+    cacheStorage: jobsCache,
+    ttl: 30,
+  });
+
+  getProjectIDs(req.params.id, req.cookies.access_token)
+    .then((projectIDs) => {
+      return getJobs(req.params.id, req.cookies.access_token, projectIDs);
+    })
+    .then((data) => {
       res.render("pages/index", {
         created: data.filter((data) => data.status === "created"),
         pending: data.filter((data) => data.status === "pending"),
         running: data.filter((data) => data.status === "running"),
-      })
-    )
-    .catch((err) =>
+      });
+    })
+    .catch((err) => {
+      console.log(err);
       res.render("pages/error", {
         error: `Cannot obtain Jobs. Pleae make sure the group ID is valid and being authorized to access it.`,
-      })
-    );
+      });
+    });
 });
 
 app.get("/error", (req, res) => {

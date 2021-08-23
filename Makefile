@@ -1,12 +1,15 @@
-config ?= makefileconfig.env
-include $(config)
-export $(shell sed 's/=.*//' $(config))
+APP_NAME = gitlab-cicd-dashboard
 
-all: build push
+.PHONY: all
+build: build-image push-image deploy
 
-build:
-	@docker build -t ${APP_NAME}:latest .
+.PHONY: test
+test:
+	yarn
+	yarn lint
 
-push:
-	@docker image tag ${APP_NAME}:latest ${REGISTRY}:latest
-	@docker push ${REGISTRY}
+.PHONY: build-image
+build-image:
+	yarn
+	yarn build-tailwindcss
+	docker build -t $(APP_NAME) .
