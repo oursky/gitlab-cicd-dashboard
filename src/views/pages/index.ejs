@@ -6,7 +6,6 @@
 </head>
 
 <body class="p-0 bg-fixed bg-gray-100">
-
   <div class="p-5 min-h-scren">
     <div class="flex flex-row">
       <div class="flex flex-grow-0">
@@ -21,26 +20,45 @@
     <div
       class="flex my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
-        <div class="p-5 text-3xl bg-white relative ">Created (<%= created.length %>)</div>
-        <% for(let i=0; i<created.length; i++){ %>
-        <%- include('../partials/jobCard', {status: created, current: i}) %>
-        <%}%>
+        <div class="p-5 text-3xl bg-white relative ">Created (<span id="created-length"></span>)</div>
+        <div id="created"></div>
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
-        <div class="p-5 text-3xl bg-white relative ">Pending (<%= pending.length %>)</div>
-        <% for(let i=0; i<pending.length; i++){ %>
-          <%- include('../partials/jobCard', {status: pending, current: i}) %>
-        <%}%>
+        <div class="p-5 text-3xl bg-white relative ">Pending (<span id="pending-length"></span>)</div>
+        <div id="pending"></div>
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
-        <div class="p-5 text-3xl bg-white relative ">Running (<%= running.length %>)</div>
-        <% for(let i=0; i<running.length; i++){ %>
-        <%- include('../partials/jobCard', {status: running, current: i}) %>
-        <%}%>
+        <div class="p-5 text-3xl bg-white relative ">Running (<span id="running-length"></span>)</div>
+        <div id="running"></div>
       </div>
     </div>
     <footer>
       <%- include('../partials/footer'); %>
     </footer>
-
+  </div>
+  <script>
+    function reloadCol(columnName) {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onload = function(){
+        document.getElementById(columnName).innerHTML = JSON.parse(this.response).join("");
+        document.getElementById(`${columnName}-length`).innerHTML = JSON.parse(this.response).length;
+      }
+      xhttp.open("GET", "<%= origin %>/api/groups/794774?status=" + columnName);
+      xhttp.send();
+    }
+    </script>
+    <script>
+      function autoUpdate(){
+          reloadCol(`running`);
+          reloadCol(`pending`);
+          reloadCol(`created`);
+        setInterval(() => {
+          reloadCol(`running`);
+          reloadCol(`pending`);
+          reloadCol(`created`);
+        }, 10000);
+      }
+      autoUpdate();
+    </script>
+</body>
 </html>
