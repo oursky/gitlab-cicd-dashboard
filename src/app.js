@@ -10,8 +10,8 @@ const withCache = require("./withCache");
 const projectIDsCache = new NodeCache();
 const jobsCache = new NodeCache();
 
-const read = require('fs').readFileSync
-const ejs = require('ejs')
+const read = require("fs").readFileSync;
+const ejs = require("ejs");
 
 require("dotenv").config();
 const config = require("./config");
@@ -75,6 +75,7 @@ app.get("/redirect", (req, res) => {
         error:
           `Cannot obtain access token. ` +
           `Please make sure Application ID, Application Secret, Redirect URL are valid`,
+        details: err,
       })
     );
 });
@@ -94,32 +95,20 @@ app.get("/groups/:id/jobs", function (req, res) {
     newLog.save().then((log) => console.log(log));
   }
 
-  // if(req.query.sortBy = "Mechine_Type"){
-  //   var groupBy = function(xs, key) {
-  //     return xs.reduce(function(rv, x) {
-  //       (rv[x[key]] = rv[x[key]] || []).push(x);
-  //       return rv;
-  //     }, {});
-  //   };
-    
-  //   console.log(groupBy(['one', 'two', 'three'], 'length'));
-  // }
-
   getProjectIDs(req.params.id, req.cookies.access_token)
     .then((projectIDs) => {
       return getJobs(req.params.id, req.cookies.access_token, projectIDs);
     })
     .then((data) => {
       res.render("pages/index", {
-        created: data.filter((data) => data.status === "created"),
-        pending: data.filter((data) => data.status === "pending"),
-        running: data.filter((data) => data.status === "running"),
+        origin: origin,
       });
     })
     .catch((err) => {
       console.log(err);
       res.render("pages/error", {
         error: `Cannot obtain Jobs. Pleae make sure the group ID is valid and being authorized to access it.`,
+        details: err,
       });
     });
 });
@@ -129,17 +118,19 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/api/groups/:id", (req, res) => {
-  return getProjectIDs(req.params.id, req.cookies.access_token)
-  .then(projectIDs => getJobs(req.params.id, req.cookies.access_token, projectIDs))
-  .then(jobs => {
-    return jobs.filter((jobs) => jobs.status === req.query.status)
-  })
-  .then(filteredJobs => {
-    console.log(filteredJobs)
-    const cardTemplate = ejs.compile(read('src/views/partials/singleJobCard.ejs', 'utf-8'))
-    console.log(filteredJobs.map(job => cardTemplate({status:job})))
-    return filteredJobs.map(job => cardTemplate({status:job}))
-  })
+  getProjectIDs(req.params.id, req.cookies.access_token)
+    .then((projectIDs) =>
+      getJobs(req.params.id, req.cookies.access_token, projectIDs)
+    )
+    .then((jobs) => {
+      return jobs.filter((jobs) => jobs.status === req.query.status);
+    })
+    .then((filteredJobs) => {
+      const cardTemplate = ejs.compile(
+        read("src/views/partials/singleJobCard.ejs", "utf-8")
+      );
+      res.send(filteredJobs.map((job) => cardTemplate({ status: job })));
+    });
 });
 
 app.listen(new URL(origin).port || 8081, () => {
