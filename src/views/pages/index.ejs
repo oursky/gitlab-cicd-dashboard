@@ -84,7 +84,7 @@
           reloadCol(`running`);
           reloadCol(`pending`);
           reloadCol(`created`);
-        }, `<%= cache_timeout %>`);
+        }, <%= cache_timeout %>);
       }
       autoUpdate();
     </script>
