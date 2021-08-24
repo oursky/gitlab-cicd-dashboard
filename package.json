@@ -15,6 +15,7 @@
     "ejs": "3.1.6",
     "eslint": "^7.2.0",
     "express": "4.17.1",
+    "jquery-ajax-unobtrusive": "^3.2.6",
     "mongoose": "5.13.5",
     "node-cache": "5.1.2",
     "node-fetch": "2.6.1",
