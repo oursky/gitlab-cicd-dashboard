@@ -48,45 +48,48 @@
       <%- include('../partials/footer'); %>
     </footer>
   </div>
-  <script>
-    function reloadCol(columnName) {
-      const xhttp = new XMLHttpRequest();
-      const url = new URL(`/api`+window.location.pathname, window.location.origin)
-      url.searchParams.append(`status`,columnName)
-      xhttp.onload = function(){
-        document.getElementById(columnName).innerHTML = "";
-        const jobsArr = JSON.parse(this.response);
-        document.getElementById(columnName).innerHTML = jobsArr.join("");
-        document.getElementById(`${columnName}-length`).innerHTML = jobsArr.length;
-      }
-      xhttp.open("GET", url);
-      xhttp.send();
-    }
-    </script>
-    <script>
-      var userIsActive = true
-      var timeout;
-      window.onload = userActive;
-      document.onmousemove = userActive;
-      function userActive(){
+   <script>
+    var userIsActive;
+    var timeout;
+
+    $.fn.extend({
+      
+      reloadCol: function(){
+          const xhttp = new XMLHttpRequest();
+          const url = new URL(`/api`+window.location.pathname, window.location.origin)
+          url.searchParams.append(`status`,$(this).attr("id"))
+          xhttp.onload = function(){
+            const jobsArr = JSON.parse(this.response);
+            $(this).html(jobsArr.join(""));
+            $(`#`+$(this).attr("id")+`-length`).html(jobsArr.length);
+          }
+          xhttp.open("GET", url);
+          xhttp.send();
+        },
+
+      autoUpdate: function(){
+          setInterval(() => {
+            if(!userIsActive){
+              console.log(userIsActive)
+              return
+            }
+            console.log(userIsActive)
+            $(`#created`).reloadCol();
+            $(`#pending`).reloadCol();
+            $(`#running`).reloadCol();
+          }, <%= cache_timeout %>);
+      },
+      
+      userActive: function(){
         clearTimeout(setTimeout(timeout));
         timeout = setTimeout(()=>userIsActive = false, 30000) 
         userIsActive = true
         return userIsActive
       }
-   </script>
-    <script>
-      function autoUpdate(){
-        setInterval(() => {
-          if(!userIsActive){
-            return
-          }
-          reloadCol(`running`);
-          reloadCol(`pending`);
-          reloadCol(`created`);
-        }, <%= cache_timeout %>);
-      }
-      autoUpdate();
-    </script>
+    })
+    $.fn.autoUpdate();
+    $(document).ready($.fn.userActive)
+    $(document).on(`mousemove`, $.fn.userActive)
+  </script>
 </body>
 </html>
