@@ -53,7 +53,6 @@
       const apiUrl = new URL(`/api`+document.location.pathname, document.location.origin)
       apiUrl.searchParams.append(`status`,columnName)
       document.getElementById(columnName).setAttribute("data-ajax-url", apiUrl);
-      console.log(document.getElementById(columnName).getAttribute("data-ajax-url"))
     }
   </script>
    <script>
