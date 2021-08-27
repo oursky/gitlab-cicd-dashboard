@@ -20,8 +20,7 @@
 (function ($) {
   var data_click = "unobtrusiveAjaxClick",
     data_target = "unobtrusiveAjaxClickTarget",
-    data_validation = "unobtrusiveValidation",
-    data_count;
+    data_validation = "unobtrusiveValidation";
 
   function getFunction(code, argNames) {
     var fn = window,
@@ -81,7 +80,6 @@
     if (confirm && !window.confirm(confirm)) {
       return;
     }
-
     loading = $(element.getAttribute("data-ajax-loading"));
     duration =
       parseInt(element.getAttribute("data-ajax-loading-duration"), 10) || 0;
@@ -112,16 +110,14 @@
         ]).apply(element, arguments);
       },
       success: function (data, status, xhr) {
-
-        if(element.getAttribute("data-ajax-postfn") != null){
-            getFunction(element.getAttribute("data-ajax-postfn"), [
-                "data",
-                "status",
-                "xhr",
-            ])
-            .apply(null, [element, data]);
+        if (element.getAttribute("data-ajax-postfn") != null) {
+          getFunction(element.getAttribute("data-ajax-postfn"), [
+            "data",
+            "status",
+            "xhr",
+          ]).apply(null, [element, data]);
         }
-        
+
         asyncOnSuccess(
           element,
           data,
@@ -131,8 +127,7 @@
           "data",
           "status",
           "xhr",
-        ])
-        .apply(element, arguments);
+        ]).apply(element, arguments);
       },
       error: function () {
         getFunction(element.getAttribute("data-ajax-failure"), [
@@ -255,7 +250,7 @@
     reloadCol: function () {
       this.each(function (index, element) {
         asyncRequest(element, {
-            fn: element.fn,
+          fn: element.fn,
           url: element.url,
           type: element.method || "GET",
           data: [],
