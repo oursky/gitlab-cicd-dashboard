@@ -112,18 +112,16 @@
         ]).apply(element, arguments);
       },
       success: function (data, status, xhr) {
-        //$(`#`+$(element).attr("id")+`-length`).html(data_count); //WORKING change of title
-        //console.log(data_count)
 
-        if (element.getAttribute("data-ajax-postfn") != null) {
-          // window[updateTitle](element, data_count)
-          getFunction(element.getAttribute("data-ajax-postfn"), [
-            "data",
-            "status",
-            "xhr",
-          ]).apply(null, [element, data]);
+        if(element.getAttribute("data-ajax-postfn") != null){
+            getFunction(element.getAttribute("data-ajax-postfn"), [
+                "data",
+                "status",
+                "xhr",
+            ])
+            .apply(null, [element, data]);
         }
-
+        
         asyncOnSuccess(
           element,
           data,
@@ -133,7 +131,8 @@
           "data",
           "status",
           "xhr",
-        ]).apply(element, arguments);
+        ])
+        .apply(element, arguments);
       },
       error: function () {
         getFunction(element.getAttribute("data-ajax-failure"), [
@@ -256,15 +255,12 @@
     reloadCol: function () {
       this.each(function (index, element) {
         asyncRequest(element, {
-          fn: element.fn,
+            fn: element.fn,
           url: element.url,
           type: element.method || "GET",
           data: [],
         });
       });
-    },
-    getCount: function (id) {
-      return;
     },
   });
 })(jQuery);
