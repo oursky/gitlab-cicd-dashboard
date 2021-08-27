@@ -5,7 +5,7 @@ const config = {
   redirect_url: `${process.env.APP_ORIGIN}/redirect`,
   cookieAge: `${process.env.COOKIE_AGE}`,
   DB_URL: `${process.env.DB_URL}`,
-  CACHE_TIMEOUT: `${process.env.CACHE_TIMEOUT}`
+  CACHE_TIMEOUT: `${process.env.CACHE_TIMEOUT}`,
 };
 
 module.exports = config;
