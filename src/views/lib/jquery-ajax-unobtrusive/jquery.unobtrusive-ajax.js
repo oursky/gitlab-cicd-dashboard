@@ -115,7 +115,7 @@
             "data",
             "status",
             "xhr",
-          ]).apply(null, [element, data]);
+          ]).apply(element, arguments);
         }
 
         asyncOnSuccess(
