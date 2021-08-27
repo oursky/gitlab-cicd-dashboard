@@ -15,7 +15,15 @@ const ejs = require("ejs");
 
 require("dotenv").config();
 const config = require("./config");
-const { origin, AppID, APP_SECRET, redirect_url, cookieAge, DB_URL, CACHE_TIMEOUT } = config;
+const {
+  origin,
+  AppID,
+  APP_SECRET,
+  redirect_url,
+  cookieAge,
+  DB_URL,
+  CACHE_TIMEOUT,
+} = config;
 
 const app = express();
 
@@ -36,7 +44,7 @@ const getProjectIDs = withCache(getData.getProjectIDs, {
 });
 const getJobs = withCache(getData.getJobs, {
   cacheStorage: jobsCache,
-  ttl: CACHE_TIMEOUT/1000,
+  ttl: CACHE_TIMEOUT / 1000,
 });
 
 if (!DB_URL) {
@@ -104,7 +112,7 @@ app.get("/groups/:id/jobs", function (req, res) {
         created: data.filter((data) => data.status === "created"),
         pending: data.filter((data) => data.status === "pending"),
         running: data.filter((data) => data.status === "running"),
-        cache_timeout: CACHE_TIMEOUT
+        cache_timeout: CACHE_TIMEOUT,
       });
     })
     .catch((err) => {
