@@ -85,8 +85,8 @@
     $(document).on(`mousemove`, $.fn.userActive)
   </script>
   <script>
-    window.updateTitle = (element, data) => {
-        $(`#`+$(element).attr("id")+`-length`).html(data.length);
+    window.updateTitle = function(data){
+        $(`#`+$(this).attr("id")+`-length`).html(data.length);
       }
   </script>
 </body>
