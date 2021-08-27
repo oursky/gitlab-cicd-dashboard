@@ -21,7 +21,14 @@
       class="flex my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Created (<span id="created-length"><%= created.length %></span>)</div>
-        <div id="created">
+        <script>
+          function buildCreatedURL(){
+            urlCreated = new URL(`/api`+document.location.pathname, document.location.origin)
+            urlCreated.searchParams.append(`status`,`created`)
+            document.getElementById("created").setAttribute("data-ajax-url", urlCreated);
+          }
+        </script>
+        <div id="created" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="" data-ajax-update="#created" data-ajax-mode="replace" data-ajax-confirm="">
           <% for(let i=0; i<created.length; i++){ %>
             <%- include('../partials/jobCard', {job: created, current: i}) %>
           <%}%>
@@ -29,7 +36,14 @@
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Pending (<span id="pending-length"><%= pending.length %></span>)</div>
-        <div id="pending">
+        <script>
+          function buildPendingURL(){
+            urlPending = new URL(`/api`+document.location.pathname, document.location.origin)
+            urlPending.searchParams.append(`status`,`pending`)
+            document.getElementById("pending").setAttribute("data-ajax-url", urlPending);
+          }
+        </script>
+        <div id="pending" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="" data-ajax-update="#pending" data-ajax-mode="replace" data-ajax-confirm="" >
           <% for(let i=0; i<pending.length; i++){ %>
             <%- include('../partials/jobCard', {job: pending, current: i}) %>
           <%}%>
@@ -37,7 +51,14 @@
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Running (<span id="running-length"><%= running.length %></span>)</div>
-        <div id="running">
+        <script>
+          function buildRunningURL(){
+            urlRunning = new URL(`/api`+document.location.pathname, document.location.origin)
+            urlRunning.searchParams.append(`status`,`running`)
+            document.getElementById("running").setAttribute("data-ajax-url", urlRunning);
+          }
+        </script>
+        <div id="running" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="" data-ajax-update="#running" data-ajax-mode="replace" data-ajax-confirm="">
           <% for(let i=0; i<running.length; i++){ %>
             <%- include('../partials/jobCard', {job: running, current: i}) %>
           <%}%>
@@ -51,35 +72,20 @@
    <script>
     var userIsActive;
     var timeout;
-
+    buildCreatedURL()
+    buildPendingURL()
+    buildRunningURL()
     $.fn.extend({
-      
-      reloadCol: function(){
-          const xhttp = new XMLHttpRequest();
-          const url = new URL(`/api`+window.location.pathname, window.location.origin)
-          url.searchParams.append(`status`,$(this).attr("id"))
-          xhttp.onload = function(){
-            const jobsArr = JSON.parse(this.response);
-            $(this).html(jobsArr.join(""));
-            $(`#`+$(this).attr("id")+`-length`).html(jobsArr.length);
-          }
-          xhttp.open("GET", url);
-          xhttp.send();
-        },
 
       autoUpdate: function(){
           setInterval(() => {
             if(!userIsActive){
-              console.log(userIsActive)
               return
             }
-            console.log(userIsActive)
-            $(`#created`).reloadCol();
-            $(`#pending`).reloadCol();
-            $(`#running`).reloadCol();
+              $(`div[data-ajax="true"]`).reloadCol()
           }, <%= cache_timeout %>);
-      },
-      
+      }(),
+    
       userActive: function(){
         clearTimeout(setTimeout(timeout));
         timeout = setTimeout(()=>userIsActive = false, 30000) 
@@ -87,9 +93,15 @@
         return userIsActive
       }
     })
-    $.fn.autoUpdate();
+
+    $.fn.autoUpdate;
     $(document).ready($.fn.userActive)
     $(document).on(`mousemove`, $.fn.userActive)
+  </script>
+  <script>
+    window.updateTitle = (element, data) => {
+        $(`#`+$(element).attr("id")+`-length`).html(data.length);
+      }
   </script>
 </body>
 </html>
