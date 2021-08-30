@@ -137,6 +137,7 @@ app.get("/api/groups/:id/jobs", (req, res) => {
       return jobs.filter((jobs) => jobs.status === req.query.status);
     })
     .then((filteredJobs) => {
+      jobs = []
       const cardTemplate = ejs.compile(
         read("src/views/partials/singleJobCard.ejs", "utf-8")
       );
@@ -144,17 +145,11 @@ app.get("/api/groups/:id/jobs", (req, res) => {
         filteredJobs.map((job) => {
           Job = {
             id: job.id,
-            name: job.project_name,
             tags: job.tag_list,
-            status: job.status,
-            url: job.web_url,
             html: cardTemplate({ job: job }),
           };
           jobs.push(Job);
-          if (req.query.groupBy != null) {
-            return Job;
-          }
-          return Job.html;
+          return jobs;
         })
       );
     });
