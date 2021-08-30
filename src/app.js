@@ -104,8 +104,8 @@ app.get("/groups/:id/jobs", function (req, res) {
   }
 
   getProjectIDs(req.params.id, req.cookies.access_token)
-    .then((projectIDs) => {
-      return getJobs(req.params.id, req.cookies.access_token, projectIDs);
+    .then((projects) => {
+      return getJobs(req.params.id, req.cookies.access_token, projects);
     })
     .then((data) => {
       res.render("pages/index", {
@@ -140,7 +140,23 @@ app.get("/api/groups/:id/jobs", (req, res) => {
       const cardTemplate = ejs.compile(
         read("src/views/partials/singleJobCard.ejs", "utf-8")
       );
-      res.send(filteredJobs.map((job) => cardTemplate({ job: job })));
+      res.send(
+        filteredJobs.map((job) => {
+          Job = {
+            id: job.id,
+            name: job.project_name,
+            tags: job.tag_list,
+            status: job.status,
+            url: job.web_url,
+            html: cardTemplate({ job: job }),
+          };
+          jobs.push(Job);
+          if (req.query.groupBy != null) {
+            return Job;
+          }
+          return Job.html;
+        })
+      );
     });
 });
 
