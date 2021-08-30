@@ -68,7 +68,7 @@
           $(update).replaceWith(data);
           break;
         default:
-          $(update).html(data);
+          $(update).html(data.html);
           break;
       }
     });
