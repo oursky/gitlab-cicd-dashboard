@@ -68,7 +68,7 @@
           $(update).replaceWith(data);
           break;
         default:
-          $(update).html(data.html);
+          $(update).html(data.flat().map((flatData) => flatData.html));
           break;
       }
     });
@@ -249,6 +249,7 @@
   jQuery.fn.extend({
     reloadCol: function () {
       this.each(function (index, element) {
+        console.log("updating");
         asyncRequest(element, {
           fn: element.fn,
           url: element.url,

@@ -137,21 +137,19 @@ app.get("/api/groups/:id/jobs", (req, res) => {
       return jobs.filter((jobs) => jobs.status === req.query.status);
     })
     .then((filteredJobs) => {
-      jobs = []
+      const jobsArr = [];
       const cardTemplate = ejs.compile(
         read("src/views/partials/singleJobCard.ejs", "utf-8")
       );
-      res.send(
-        filteredJobs.map((job) => {
-          Job = {
-            id: job.id,
-            tags: job.tag_list,
-            html: cardTemplate({ job: job }),
-          };
-          jobs.push(Job);
-          return jobs;
-        })
-      );
+      JobsArr = filteredJobs.map((job) => {
+        Job = {
+          id: job.id,
+          tags: job.tag_list,
+          html: cardTemplate({ job: job }),
+        };
+        jobsArr.push(Job);
+      });
+      res.send(jobsArr);
     });
 });
 
