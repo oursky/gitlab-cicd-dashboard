@@ -21,7 +21,7 @@
       class="flex my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Created (<span id="created-length"><%= created.length %></span>)</div>
-        <div id="created" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="" data-ajax-update="#created" data-ajax-mode="replace" data-ajax-confirm="">
+        <div id="created" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="/api/resources?status=created&groupid=<%= groupID %>" data-ajax-update="#created" data-ajax-mode="replace" data-ajax-confirm="">
           <% for(let i=0; i<created.length; i++){ %>
             <%- include('../partials/jobCard', {job: created, current: i}) %>
           <%}%>
@@ -29,7 +29,7 @@
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Pending (<span id="pending-length"><%= pending.length %></span>)</div>
-        <div id="pending" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="" data-ajax-update="#pending" data-ajax-mode="replace" data-ajax-confirm="" >
+        <div id="pending" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="/api/resources?status=pending&groupid=<%= groupID %>" data-ajax-update="#pending" data-ajax-mode="replace" data-ajax-confirm="" >
           <% for(let i=0; i<pending.length; i++){ %>
             <%- include('../partials/jobCard', {job: pending, current: i}) %>
           <%}%>
@@ -37,7 +37,7 @@
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
         <div class="p-5 text-3xl bg-white relative ">Running (<span id="running-length"><%= running.length %></span>)</div>
-        <div id="running" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="" data-ajax-update="#running" data-ajax-mode="replace" data-ajax-confirm="">
+        <div id="running" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="/api/resources?status=running&groupid=<%= groupID %>" data-ajax-update="#running" data-ajax-mode="replace" data-ajax-confirm="">
           <% for(let i=0; i<running.length; i++){ %>
             <%- include('../partials/jobCard', {job: running, current: i}) %>
           <%}%>
@@ -48,21 +48,9 @@
       <%- include('../partials/footer'); %>
     </footer>
   </div>
-  <script>
-    function buildApiUrl(columnName){
-      const apiUrl = new URL(`${window.location.origin}/api/resources`)
-      apiUrl.searchParams.append(`groupid`,groupID)
-      apiUrl.searchParams.append(`status`,columnName)
-      document.getElementById(columnName).setAttribute("data-ajax-url", apiUrl);
-    }
-  </script>
    <script>
-    const groupID = <%= groupID %>;
     var userIsActive;
     var timeout;
-    buildApiUrl("created")
-    buildApiUrl("pending")
-    buildApiUrl("running")
     
     function checkUserActivity(){
           setInterval(() => {
