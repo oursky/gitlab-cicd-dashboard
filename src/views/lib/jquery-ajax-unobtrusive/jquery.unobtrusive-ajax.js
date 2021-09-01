@@ -247,7 +247,7 @@
   });
 
   jQuery.fn.extend({
-    reloadCol: function () {
+    callElementFunction: function () {
       this.each(function (index, element) {
         asyncRequest(element, {
           fn: element.fn,

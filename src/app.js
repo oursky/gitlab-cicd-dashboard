@@ -113,6 +113,7 @@ app.get("/groups/:id/jobs", function (req, res) {
         pending: data.filter((data) => data.status === "pending"),
         running: data.filter((data) => data.status === "running"),
         cache_timeout: CACHE_TIMEOUT,
+        groupID: req.params.id,
       });
     })
     .catch((err) => {
@@ -128,10 +129,10 @@ app.get("/error", (req, res) => {
   res.render("pages/error");
 });
 
-app.get("/api/groups/:id/jobs", (req, res) => {
-  getProjectIDs(req.params.id, req.cookies.access_token)
+app.get("/api/resources", (req, res) => {
+  getProjectIDs(req.query.groupid, req.cookies.access_token)
     .then((projectIDs) =>
-      getJobs(req.params.id, req.cookies.access_token, projectIDs)
+      getJobs(req.query.groupid, req.cookies.access_token, projectIDs)
     )
     .then((jobs) => {
       return jobs.filter((jobs) => jobs.status === req.query.status);

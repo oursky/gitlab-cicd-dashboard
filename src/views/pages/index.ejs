@@ -50,29 +50,31 @@
   </div>
   <script>
     function buildApiUrl(columnName){
-      const apiUrl = new URL(`/api`+document.location.pathname, document.location.origin)
+      const apiUrl = new URL(`${window.location.origin}/api/resources`)
+      apiUrl.searchParams.append(`groupid`,groupID)
       apiUrl.searchParams.append(`status`,columnName)
       document.getElementById(columnName).setAttribute("data-ajax-url", apiUrl);
     }
   </script>
    <script>
+    const groupID = <%= groupID %>;
     var userIsActive;
     var timeout;
     buildApiUrl("created")
     buildApiUrl("pending")
     buildApiUrl("running")
-    $.fn.extend({
-
-      autoUpdate: function(){
+    
+    function checkUserActivity(){
           setInterval(() => {
             if(!userIsActive){
               return
             }
-              $(`div[data-ajax="true"]`).reloadCol()
+              $(`div[data-ajax="true"]`).callElementFunction()
           }, <%= cache_timeout %>);
-      }(),
-    
-      userActive: function(){
+      }
+
+    $.fn.extend({
+      resetReloadTimeout: function(){
         clearTimeout(setTimeout(timeout));
         timeout = setTimeout(()=>userIsActive = false, 30000) 
         userIsActive = true
@@ -80,9 +82,9 @@
       }
     })
 
-    $.fn.autoUpdate;
-    $(document).ready($.fn.userActive)
-    $(document).on(`mousemove`, $.fn.userActive)
+    checkUserActivity();
+    $(document).ready($.fn.resetReloadTimeout)
+    $(document).on(`mousemove`, $.fn.resetReloadTimeout)
   </script>
   <script>
     window.updateTitle = function(data){
