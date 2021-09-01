@@ -183,6 +183,18 @@
   }
 
   $(document).on("click", "[data-ajax=true]", function (evt) {
+<<<<<<< Updated upstream
+    asyncRequest(this, {
+      url: this.href,
+      type: "GET",
+      data: [],
+    });
+  });
+
+  $(document).on("click", "[data-ajax=true] [data-ajax-click=true]", function (evt) {
+    evt.preventDefault();
+=======
+>>>>>>> Stashed changes
     asyncRequest(this, {
       url: this.href,
       type: "GET",
