@@ -68,7 +68,7 @@
           $(update).replaceWith(data);
           break;
         default:
-          $(update).html(data);
+          $(update).html(data.flat().map((flatData) => flatData.html));
           break;
       }
     });
@@ -183,7 +183,6 @@
   }
 
   $(document).on("click", "[data-ajax=true]", function (evt) {
-<<<<<<< Updated upstream
     asyncRequest(this, {
       url: this.href,
       type: "GET",
@@ -193,8 +192,6 @@
 
   $(document).on("click", "[data-ajax=true] [data-ajax-click=true]", function (evt) {
     evt.preventDefault();
-=======
->>>>>>> Stashed changes
     asyncRequest(this, {
       url: this.href,
       type: "GET",
