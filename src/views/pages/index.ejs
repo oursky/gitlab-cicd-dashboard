@@ -9,13 +9,32 @@
   <div class="p-5 min-h-scren">
     <div class="flex flex-row">
       <div class="flex flex-grow-0">
-        <img src="../../views/images/gitlab_icon.png" class="max-h-10 max-w-10">
+        <a href="https://gitlab.com"><img src="../../views/images/gitlab_icon.png" class="max-h-10 max-w-10"></a>
       </div>
       <div class="flex flex-grow "></div>
       <div class="flex flex-grow-0">
-        <div class=""><img src="../../views/images/profile_icon.png" class="max-h-10 max-w-10">
+        <div class="cursor-pointer" onclick="openNav()"><img src="../../views/images/hamburger_icon.png" class="max-h-10 max-w-10">
         </div>
       </div>
+    </div>
+    <div id="nav" class="z-10 fixed bg-white backdrop-filter backfrop-blur-lg bg-opacity-95 overflow-scroll w-0 top-0 right-0 h-full overflow-x-hidden transition-all duration-100">
+      <div class="flex flex-row">
+        <div class="flex flex-grow"></div>
+        <div class="flex flex-grow-0">
+          <div class="p-5"><img src="../../views/images/close_icon.png" class="max-h-10 max-w-10 cursor-pointer" onclick="closeNav()"></div>
+        </div>
+      </div>
+    <div class="px-5 h-full">
+      <div class="mx-5"><i class="fas fa-list"></i> Group by</div>
+      <div class="text-center">
+        <select id="groupby" class="w-3/5 bg-opacity-400 border-2 rounded border-gray-300" onchange="groupBy(this.value)">NONE <i class="fa fa-caret-down"></i>
+          <option value="none" class="">NONE</option>
+          <option value="id" class="">ID</option>
+          <option value="tag_list" class="">MACHINE TYPE</option>
+        </select>
+      </div>
+      </div>
+    </div>
     </div>
     <div
       class="flex my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
@@ -88,6 +107,34 @@
     window.updateTitle = function(data){
         $(`#`+$(this).attr("id")+`-length`).html(data.length);
       }
+  </script>
+  <script>
+    function openNav() {
+      $(`#nav`).width("300px");
+    }
+    
+    function closeNav() {
+      $(`#nav`).width("0%");
+    }
+  </script>
+  <script>
+    function groupBy(criteria) {
+        const windowUrl = new URL(window.location.href)
+        const params = new URLSearchParams(windowUrl.search)
+        if(criteria==="none"){
+            windowUrl.searchParams.delete(`groupby`)
+            window.location.href = windowUrl
+          return
+        }  
+        windowUrl.searchParams.set(`groupby`,criteria)
+        window.location.href = windowUrl
+      }
+    function checkUrl() {
+      const params = new URLSearchParams(window.location.search)
+      if(params.has('groupby'))
+        $(`#groupby`).val(params.get('groupby'))
+    }
+    checkUrl()
   </script>
 </body>
 </html>
