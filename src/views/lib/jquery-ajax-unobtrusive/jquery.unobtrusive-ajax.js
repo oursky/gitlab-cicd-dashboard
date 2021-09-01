@@ -190,14 +190,18 @@
     });
   });
 
-  $(document).on("click", "[data-ajax=true] [data-ajax-click=true]", function (evt) {
-    evt.preventDefault();
-    asyncRequest(this, {
-      url: this.href,
-      type: "GET",
-      data: [],
-    });
-  });
+  $(document).on(
+    "click",
+    "[data-ajax=true] [data-ajax-click=true]",
+    function (evt) {
+      evt.preventDefault();
+      asyncRequest(this, {
+        url: this.href,
+        type: "GET",
+        data: [],
+      });
+    }
+  );
 
   $(document).on(
     "click",
