@@ -183,7 +183,6 @@
   }
 
   $(document).on("click", "[data-ajax=true]", function (evt) {
-    evt.preventDefault();
     asyncRequest(this, {
       url: this.href,
       type: "GET",
