@@ -104,8 +104,8 @@ app.get("/groups/:id/jobs", function (req, res) {
   }
 
   getProjectIDs(req.params.id, req.cookies.access_token)
-    .then((projectIDs) => {
-      return getJobs(req.params.id, req.cookies.access_token, projectIDs);
+    .then((projects) => {
+      return getJobs(req.params.id, req.cookies.access_token, projects);
     })
     .then((data) => {
       res.render("pages/index", {
@@ -129,19 +129,28 @@ app.get("/error", (req, res) => {
   res.render("pages/error");
 });
 
-app.get("/api/resources", (req, res) => {
-  getProjectIDs(req.query.groupid, req.cookies.access_token)
+app.get("/api/groups/:id/jobs", (req, res) => {
+  getProjectIDs(req.params.id, req.cookies.access_token)
     .then((projectIDs) =>
-      getJobs(req.query.groupid, req.cookies.access_token, projectIDs)
+      getJobs(req.params.id, req.cookies.access_token, projectIDs)
     )
     .then((jobs) => {
       return jobs.filter((jobs) => jobs.status === req.query.status);
     })
     .then((filteredJobs) => {
+      const jobsArr = [];
       const cardTemplate = ejs.compile(
         read("src/views/partials/singleJobCard.ejs", "utf-8")
       );
-      res.send(filteredJobs.map((job) => cardTemplate({ job: job })));
+      JobsArr = filteredJobs.map((job) => {
+        Job = {
+          id: job.id,
+          tags: job.tag_list,
+          html: cardTemplate({ job: job }),
+        };
+        jobsArr.push(Job);
+      });
+      res.send(jobsArr);
     });
 });
 
