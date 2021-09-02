@@ -27,10 +27,10 @@
     <div class="px-5 h-full">
       <div class="mx-5"><i class="fas fa-list"></i> Group by</div>
       <div class="text-center">
-        <select id="groupby" class="w-3/5 bg-opacity-400 border-2 rounded border-gray-300" onchange="groupBy(this.value)">NONE <i class="fa fa-caret-down"></i>
+        <select id="groupby" class="w-3/5 bg-opacity-400 border-2 rounded border-gray-300">NONE <i class="fa fa-caret-down"></i>
           <option value="none" class="">NONE</option>
           <option value="name" class="">PROJECT</option>
-          <option value="tag_list" class="">MACHINE TYPE</option>
+          <option value="tags" class="">MACHINE TYPE</option>
         </select>
       </div>
       </div>
@@ -38,7 +38,7 @@
     <div
       class="flex my-5 sm:flex-row flex-col bg-black shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-5 rounded-lg overflow-scroll">
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
-        <div class="p-5 text-3xl bg-white relative ">Created (<span id="created-length"><%= created.length %></span>)</div>
+        <div class="p-5 text-3xl bg-white relative "><span class="created-circle" id="created-length"> <%= created.length %> </span>Created</div>
         <div id="created" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="/api/groups/<%= groupID %>/jobs?status=created" data-ajax-update="#created" data-ajax-mode="replace" data-ajax-confirm="">
           <% for(let i=0; i<created.length; i++){ %>
             <%- include('../partials/jobCard', {job: created, current: i}) %>
@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
-        <div class="p-5 text-3xl bg-white relative ">Pending (<span id="pending-length"><%= pending.length %></span>)</div>
+        <div class="p-5 text-3xl bg-white relative "><span class="pending-circle" id="pending-length"> <%= pending.length %> </span>Pending</div>
         <div id="pending" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="/api/groups/<%= groupID %>/jobs?status=pending"" data-ajax-update="#pending" data-ajax-mode="replace" data-ajax-confirm="" >
           <% for(let i=0; i<pending.length; i++){ %>
             <%- include('../partials/jobCard', {job: pending, current: i}) %>
@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="flex flex-1 flex-col sm:w-1/3 text-center w-full">
-        <div class="p-5 text-3xl bg-white relative ">Running (<span id="running-length"><%= running.length %></span>)</div>
+        <div class="p-5 text-3xl bg-white relative "><span class="running-circle" id="running-length"> <%= running.length %> </span>Running</div>
         <div id="running" data-ajax='true' data-ajax-postfn="window.updateTitle" data-ajax-url="/api/groups/<%= groupID %>/jobs?status=running"" data-ajax-update="#running" data-ajax-mode="replace" data-ajax-confirm="">
           <% for(let i=0; i<running.length; i++){ %>
             <%- include('../partials/jobCard', {job: running, current: i}) %>
@@ -91,22 +91,45 @@
     }
   </script>
   <script>
-    function groupBy(criteria) {
-        const windowUrl = new URL(window.location.href)
+    function callGroupingFunction(criteria){
+      $(`div[data-ajax="true"]`).attr(`data-ajax-groupby-criteria`, criteria)
+      $(`div[data-ajax="true"]`).attr(`data-ajax-groupby`,`window.groupByCriteria`)
+      $(`div[data-ajax="true"]`).callElementFunction()
+    }
+    
+    (function checkUrl() {
+      const params = new URLSearchParams(window.location.search)
+      if(params.has('groupby')){
+        $(`#groupby`).val(params.get('groupby'))
+        callGroupingFunction(params.get(`groupby`))
+      }
+    })()
+
+    $(`#groupby`).change(function(){
+      const windowUrl = new URL(window.location.href)
         const params = new URLSearchParams(windowUrl.search)
+        const criteria = $(this).find(`:selected`).attr("value")
         if(criteria==="none"){
             windowUrl.searchParams.delete(`groupby`)
             window.location.href = windowUrl
           return
         }  
         windowUrl.searchParams.set(`groupby`,criteria)
-        window.location.href = windowUrl
-      }
-    (function checkUrl() {
-      const params = new URLSearchParams(window.location.search)
-      if(params.has('groupby'))
-        $(`#groupby`).val(params.get('groupby'))
-    })()
+        window.history.pushState({},'', windowUrl)
+        callGroupingFunction(criteria)
+      })
+
+    window.groupByCriteria = function(data){
+      const criteria = this.getAttribute("data-ajax-groupby-criteria");
+      const groups = [...new Set(data.map(data=>data[criteria].toString()))]
+      var htmlArr = []
+      groups.forEach(groupName => {
+        const groupJobs = (data.filter(job=>job[criteria] == groupName))
+        htmlArr.push(`<div class="${this.id}-group-title"> ${groupName}  <span class="${this.id}-circle-sm"> ${groupJobs.length} </span></div>`)
+        htmlArr.push(groupJobs.map(job=>job.html).join(``))
+      })
+      $(`#`+$(this).attr("id")).html(htmlArr)
+    }
   </script>
 </body>
 </html>
