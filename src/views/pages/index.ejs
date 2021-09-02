@@ -29,7 +29,7 @@
       <div class="text-center">
         <select id="groupby" class="w-3/5 bg-opacity-400 border-2 rounded border-gray-300" onchange="groupBy(this.value)">NONE <i class="fa fa-caret-down"></i>
           <option value="none" class="">NONE</option>
-          <option value="id" class="">ID</option>
+          <option value="name" class="">PROJECT</option>
           <option value="tag_list" class="">MACHINE TYPE</option>
         </select>
       </div>
@@ -102,12 +102,11 @@
         windowUrl.searchParams.set(`groupby`,criteria)
         window.location.href = windowUrl
       }
-    function checkUrl() {
+    (function checkUrl() {
       const params = new URLSearchParams(window.location.search)
       if(params.has('groupby'))
         $(`#groupby`).val(params.get('groupby'))
-    }
-    checkUrl()
+    })()
   </script>
 </body>
 </html>
