@@ -5,20 +5,47 @@
 /* Clear floats after the columns */
 
 .created-card {
-  box-shadow: inset 0.2rem 0 lightblue, 0 0.2rem #ddd;
+  box-shadow: inset 0.2rem 0 lightblue;
 }
 .created-id {
   @apply text-sky-300 font-bold;
 }
+.created-circle{
+  @apply block rounded-full w-10 h-10 border-solid border-2 border-sky-400 bg-opacity-0 text-center;
+}
+.created-circle-sm{
+  @apply absolute m-1 rounded-full w-6 h-6 bg-sky-700 text-center text-white font-bold;
+}
+.created-group-title{
+  @apply bg-sky-200 text-lg;
+}
 .pending-card {
-  box-shadow: inset 0.2rem 0 #c96785, 0 0.2rem #ddd;
+  box-shadow: inset 0.2rem 0 #c96785;
 }
 .pending-id {
-  @apply text-red-400 font-bold;
+  @apply text-red-300 font-bold;
+}
+.pending-circle{
+  @apply block rounded-full w-10 h-10 border-2 border-red-400 bg-opacity-0 text-center;
+}
+.pending-circle-sm{
+  @apply absolute m-1 rounded-full w-6 h-6 bg-red-700 text-center text-white font-bold;
+}
+.pending-group-title{
+  @apply bg-red-300 text-lg;
 }
 .running-card {
-  box-shadow: inset 0.2rem 0 #90c967, 0 0.2rem #ddd;
+  box-shadow: inset 0.2rem 0 #90c967;
 }
 .running-id {
   @apply text-green-300 font-bold;
+}
+.running-circle{
+  @apply block rounded-full w-10 h-10 border-solid border-2 border-green-400 bg-opacity-0 text-center;
+}
+.running-circle-sm{
+  @apply absolute m-1 rounded-full w-6 h-6 bg-green-700 text-center text-white font-bold;
+}
+.running-group-title{
+  @apply bg-green-200 text-lg;
 }
