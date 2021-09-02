@@ -10,9 +10,20 @@ const withCache = require("./withCache");
 const projectIDsCache = new NodeCache();
 const jobsCache = new NodeCache();
 
+const read = require("fs").readFileSync;
+const ejs = require("ejs");
+
 require("dotenv").config();
 const config = require("./config");
-const { origin, AppID, APP_SECRET, redirect_url, cookieAge, DB_URL } = config;
+const {
+  origin,
+  AppID,
+  APP_SECRET,
+  redirect_url,
+  cookieAge,
+  DB_URL,
+  CACHE_TIMEOUT,
+} = config;
 
 const app = express();
 
@@ -26,6 +37,15 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 app.use(cookieParser());
+
+const getProjectIDs = withCache(getData.getProjectIDs, {
+  cacheStorage: projectIDsCache,
+  ttl: 1800,
+});
+const getJobs = withCache(getData.getJobs, {
+  cacheStorage: jobsCache,
+  ttl: CACHE_TIMEOUT / 1000,
+});
 
 if (!DB_URL) {
   mongoose
@@ -63,6 +83,7 @@ app.get("/redirect", (req, res) => {
         error:
           `Cannot obtain access token. ` +
           `Please make sure Application ID, Application Secret, Redirect URL are valid`,
+        details: err,
       })
     );
 });
@@ -82,36 +103,55 @@ app.get("/groups/:id/jobs", function (req, res) {
     newLog.save().then((log) => console.log(log));
   }
 
-  const getProjectIDs = withCache(getData.getProjectIDs, {
-    cacheStorage: projectIDsCache,
-    ttl: 1800,
-  });
-  const getJobs = withCache(getData.getJobs, {
-    cacheStorage: jobsCache,
-    ttl: 30,
-  });
-
   getProjectIDs(req.params.id, req.cookies.access_token)
-    .then((projectIDs) => {
-      return getJobs(req.params.id, req.cookies.access_token, projectIDs);
+    .then((projects) => {
+      return getJobs(req.params.id, req.cookies.access_token, projects);
     })
     .then((data) => {
       res.render("pages/index", {
         created: data.filter((data) => data.status === "created"),
         pending: data.filter((data) => data.status === "pending"),
         running: data.filter((data) => data.status === "running"),
+        cache_timeout: CACHE_TIMEOUT,
+        groupID: req.params.id,
       });
     })
     .catch((err) => {
       console.log(err);
       res.render("pages/error", {
         error: `Cannot obtain Jobs. Pleae make sure the group ID is valid and being authorized to access it.`,
+        details: err,
       });
     });
 });
 
 app.get("/error", (req, res) => {
   res.render("pages/error");
+});
+
+app.get("/api/groups/:id/jobs", (req, res) => {
+  getProjectIDs(req.params.id, req.cookies.access_token)
+    .then((projectIDs) =>
+      getJobs(req.params.id, req.cookies.access_token, projectIDs)
+    )
+    .then((jobs) => {
+      return jobs.filter((jobs) => jobs.status === req.query.status);
+    })
+    .then((filteredJobs) => {
+      const jobsArr = [];
+      const cardTemplate = ejs.compile(
+        read("src/views/partials/singleJobCard.ejs", "utf-8")
+      );
+      JobsArr = filteredJobs.map((job) => {
+        Job = {
+          id: job.id,
+          tags: job.tag_list,
+          html: cardTemplate({ job: job }),
+        };
+        jobsArr.push(Job);
+      });
+      res.send(jobsArr);
+    });
 });
 
 app.listen(new URL(origin).port || 8081, () => {

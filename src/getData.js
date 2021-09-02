@@ -19,8 +19,8 @@ module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
 };
 
 module.exports.getJobs = function getJobs(requestedGroupID, token, projectIDs) {
-  const jobPromises = projectIDs.map((projectID) =>  
-  gitlabAPI.getJobsByProjectID(token, projectID)
+  const jobPromises = projectIDs.map((projectID) =>
+    gitlabAPI.getJobsByProjectID(token, projectID)
   );
   return Promise.all(jobPromises).then((data) => {
     const flattenedJobArray = data.flat();
