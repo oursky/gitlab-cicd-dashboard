@@ -183,13 +183,25 @@
   }
 
   $(document).on("click", "[data-ajax=true]", function (evt) {
-    evt.preventDefault();
     asyncRequest(this, {
       url: this.href,
       type: "GET",
       data: [],
     });
   });
+
+  $(document).on(
+    "click",
+    "[data-ajax=true] [data-ajax-click=true]",
+    function (evt) {
+      evt.preventDefault();
+      asyncRequest(this, {
+        url: this.href,
+        type: "GET",
+        data: [],
+      });
+    }
+  );
 
   $(document).on(
     "click",
@@ -247,7 +259,7 @@
   });
 
   jQuery.fn.extend({
-    reloadCol: function () {
+    callElementFunction: function () {
       this.each(function (index, element) {
         asyncRequest(element, {
           fn: element.fn,

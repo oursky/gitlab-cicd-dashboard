@@ -113,6 +113,7 @@ app.get("/groups/:id/jobs", function (req, res) {
         pending: data.filter((data) => data.status === "pending"),
         running: data.filter((data) => data.status === "running"),
         cache_timeout: CACHE_TIMEOUT,
+        groupID: req.params.id,
       });
     })
     .catch((err) => {
