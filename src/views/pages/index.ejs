@@ -143,11 +143,26 @@
       var htmlArr = []
       groups.forEach(groupName => {
         const groupJobs = (data.filter(job=>job[criteria] == groupName))
-        htmlArr.push(`<div class="${this.id}-group-title"> ${groupName}  <span class="${this.id}-circle-sm"> ${groupJobs.length} </span></div>`)
+        var titleTemplate = $("Template")[0]
+        var titleItem = titleTemplate.content.cloneNode(true)
+        var titleDiv = titleItem.querySelectorAll("div")
+        titleDiv[0].classList.add(`${this.id}-group-title`)
+        titleDiv[2].innerHTML = groupName
+        titleDiv[3].classList.add(`${this.id}-circle-sm`)
+        titleDiv[3].innerHTML = groupJobs.length
+        htmlArr.push(titleItem) 
         htmlArr.push(groupJobs.map(job=>job.html).join(``))
       })
       $(`#`+$(this).attr("id")).html(htmlArr)
     }
   </script>
+  <template>
+    <div class="flex flex-row">
+      <div class="flex flex-grow"></div>
+      <div class="flex flex-grow-0"></div>
+      <div class="flex flex-grow-0"></div>
+      <div class="flex flex-grow"></div>
+    </div>
+  </template>
 </body>
 </html>
