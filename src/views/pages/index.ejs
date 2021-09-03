@@ -125,8 +125,11 @@
         const params = new URLSearchParams(windowUrl.search)
         const criteria = $(this).find(`:selected`).attr("value")
         if(criteria==="none"){
-            windowUrl.searchParams.delete(`groupby`)
-            window.location.href = windowUrl
+          windowUrl.searchParams.delete(`groupby`)
+          window.history.pushState({},'', windowUrl)
+          $(`div[data-ajax="true"]`).removeAttr(`data-ajax-groupby-criteria`)
+          $(`div[data-ajax="true"]`).removeAttr(`data-ajax-groupby`)
+          $(`div[data-ajax="true"]`).callElementFunction()
           return
         }  
         windowUrl.searchParams.set(`groupby`,criteria)
