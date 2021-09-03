@@ -143,12 +143,12 @@ app.get("/api/groups/:id/jobs", (req, res) => {
         read("src/views/partials/singleJobCard.ejs", "utf-8")
       );
       JobsArr = filteredJobs.map((job) => {
-        Job = {
+        const jobObj = {
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({ job: job }),
         };
-        jobsArr.push(Job);
+        jobsArr.push(jobObj);
       });
       res.send(jobsArr);
     });

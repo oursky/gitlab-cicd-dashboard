@@ -14,11 +14,11 @@ module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
     .then((projects) => {
       const projectList = [];
       projects.map((project) => {
-        Project = {
+        const projectObj = {
           id: project.id,
           name: project.name,
         };
-        projectList.push(Project);
+        projectList.push(projectObj);
         return projectList;
       });
       return projectList;
