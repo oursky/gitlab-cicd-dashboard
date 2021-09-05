@@ -13,26 +13,24 @@
       </div>
       <div class="flex flex-grow "></div>
       <div class="flex flex-grow-0">
-        <div class="cursor-pointer" onclick="openNav()"><img src="../../views/images/hamburger_icon.png" class="max-h-10 max-w-10">
+        <div class="flex flex-col sm:flex-row">
+          <div class="flex flex-grow-0">
+            <div class="px-5 h-full">
+              <div class="leading-7"><i class="fas fa-list"></i> Group by</div>
+            </div>
+          </div>
+          <div class="flex flex-grow">
+            <div class="m-1">
+              <select id="groupby" class="w-full bg-opacity-400 border-2 rounded border-gray-300">NONE <i class="fa fa-caret-down"></i>
+                <option value="none" class="">NONE</option>
+                <option value="name" class="">PROJECT</option>
+                <option value="tags" class="">MACHINE TYPE</option>
+              </select>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div id="nav" class="z-10 fixed bg-white backdrop-filter backfrop-blur-lg bg-opacity-95 overflow-scroll w-0 top-0 right-0 h-full overflow-x-hidden transition-all duration-100">
-      <div class="flex flex-row">
-        <div class="flex flex-grow"></div>
-        <div class="flex flex-grow-0">
-          <div class="p-5"><img src="../../views/images/close_icon.png" class="max-h-10 max-w-10 cursor-pointer" onclick="closeNav()"></div>
+
         </div>
-      </div>
-    <div class="px-5 h-full">
-      <div class="mx-5"><i class="fas fa-list"></i> Group by</div>
-      <div class="text-center">
-        <select id="groupby" class="w-3/5 bg-opacity-400 border-2 rounded border-gray-300">NONE <i class="fa fa-caret-down"></i>
-          <option value="none" class="">NONE</option>
-          <option value="name" class="">PROJECT</option>
-          <option value="tags" class="">MACHINE TYPE</option>
-        </select>
-      </div>
       </div>
     </div>
     <div
