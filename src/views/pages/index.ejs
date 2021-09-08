@@ -29,8 +29,6 @@
             </div>
           </div>
         </div>
-
-        </div>
       </div>
     </div>
     <div
@@ -135,25 +133,26 @@
       var htmlArr = []
       groups.forEach(groupName => {
         const groupJobs = (data.filter(job=>job[criteria] == groupName))
-        var titleTemplate = $("Template")[0]
-        var titleItem = titleTemplate.content.cloneNode(true)
-        var titleDiv = titleItem.querySelectorAll("div")
-        titleDiv[0].classList.add(`${this.id}-group-title`)
-        titleDiv[2].innerHTML = groupName
-        titleDiv[3].classList.add(`${this.id}-circle-sm`)
-        titleDiv[3].innerHTML = groupJobs.length
-        htmlArr.push(titleItem) 
+        var titleTemplate = $("#group-title-template").html()
+        var titleClone = $(titleTemplate)
+        titleClone.find("#group-title-container").addClass(`${this.id}-group-title`)
+        titleClone.find("#group-title-text").html(groupName)
+        titleClone.find("#group-title-count").addClass(`${this.id}-circle-sm`)
+        titleClone.find("#group-title-count").html(groupJobs.length)
+        htmlArr.push(titleClone) 
         htmlArr.push(groupJobs.map(job=>job.html).join(``))
       })
       $(`#`+$(this).attr("id")).html(htmlArr)
     }
   </script>
   <template id="group-title-template">
-    <div class="flex flex-row p-2">
-      <div class="flex-grow"></div>
-      <div id="group-title-text" class=""></div>
-      <div id="group-title-count" class=""></div>
-      <div class="flex-grow"></div>
+    <div id="group-title-wrapper" class="">
+      <div id="group-title-container" class="flex flex-row p-2">
+        <div class="flex-grow"></div>
+        <div id="group-title-text" class=""></div>
+        <div id="group-title-count" class=""></div>
+        <div class="flex-grow"></div>
+      </div>
     </div>
   </template>
 </body>
