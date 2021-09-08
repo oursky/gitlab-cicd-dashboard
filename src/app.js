@@ -108,10 +108,46 @@ app.get("/groups/:id/jobs", function (req, res) {
       return getJobs(req.params.id, req.cookies.access_token, projects);
     })
     .then((data) => {
+      const createdCards = []
+      const pendingCards = []
+      const runningCards = []
+      const createdJobs = data.filter((data) => data.status === "created")
+      const pendingJobs = data.filter((data) => data.status === "pending")
+      const runningJobs = data.filter((data) => data.status === "running")
+      const cardTemplate = ejs.compile(
+        read("src/views/partials/singleJobCard.ejs", "utf-8")
+      );
+      createdJobs.map((job)=>{
+        const jobObj = {
+          name: job.project_name,
+          tags: job.tag_list,
+          html: cardTemplate({job: job})
+        }
+      createdCards.push(jobObj)
+      })
+      pendingJobs.map((job)=>{
+        const jobObj = {
+          name: job.project_name,
+          tags: job.tag_list,
+          html: cardTemplate({job: job})
+        }
+      pendingCards.push(jobObj)
+      })
+      runningJobs.map((job)=>{
+        const jobObj = {
+          name: job.project_name,
+          tags: job.tag_list,
+          html: cardTemplate({job: job})
+        }
+      runningCards.push(jobObj)
+      })
       res.render("pages/index", {
-        created: data.filter((data) => data.status === "created"),
-        pending: data.filter((data) => data.status === "pending"),
-        running: data.filter((data) => data.status === "running"),
+        created: createdJobs,
+        pending: pendingJobs,
+        running: runningJobs,
+        created_cards: createdCards,
+        pending_cards: pendingCards,
+        running_cards: runningCards,
         cache_timeout: CACHE_TIMEOUT,
         groupID: req.params.id,
       });
