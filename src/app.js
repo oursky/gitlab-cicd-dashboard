@@ -7,6 +7,7 @@ const getData = require("./getData");
 const getToken = require("./getToken");
 const NodeCache = require("node-cache");
 const withCache = require("./withCache");
+const getTimezoneAPI = require("./getTimezoneAPI");
 const projectIDsCache = new NodeCache();
 const jobsCache = new NodeCache();
 
@@ -95,6 +96,7 @@ app.get("/redirect", (req, res) => {
 const LogItem = require("./models/LogItem");
 
 app.get("/groups/:id/jobs", function (req, res) {
+  const timezoneOffset = getTimezoneAPI.getTimezone(req.headers[`x-forwarded-for`]);
   if (req.cookies.access_token === "" || req.cookies.access_token == null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
@@ -109,7 +111,7 @@ app.get("/groups/:id/jobs", function (req, res) {
 
   getProjectIDs(req.params.id, req.cookies.access_token)
     .then((projects) => {
-      return getJobs(req.params.id, req.cookies.access_token, projects);
+      return getJobs(req.params.id, req.cookies.access_token, projects, timezoneOffset)
     })
     .then((data) => {
       const createdJobs = data.filter((data) => data.status === "created")
@@ -162,9 +164,10 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/api/groups/:id/jobs", (req, res) => {
+  const timezoneOffset = getTimezoneAPI.getTimezone(req.headers[`x-forwarded-for`])
   getProjectIDs(req.params.id, req.cookies.access_token)
     .then((projectIDs) =>
-      getJobs(req.params.id, req.cookies.access_token, projectIDs)
+      getJobs(req.params.id, req.cookies.access_token, projectIDs, timezoneOffset)
     )
     .then((jobs) => {
       return jobs.filter((jobs) => jobs.status === req.query.status);
