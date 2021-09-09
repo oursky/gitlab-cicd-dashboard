@@ -118,11 +118,13 @@
             "xhr",
           ]).apply(element, arguments);
         }
-        if (element.getAttribute("data-ajax-groupby") != null){
+        if (element.getAttribute("data-ajax-groupby") != null) {
           getFunction(element.getAttribute("data-ajax-groupby"), [
-            "data", "status", "xhr"
+            "data",
+            "status",
+            "xhr",
           ]).apply(element, arguments);
-          return
+          return;
         }
 
         asyncOnSuccess(
