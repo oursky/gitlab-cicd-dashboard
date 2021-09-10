@@ -3,7 +3,6 @@ const path = require("path");
 const URL = require("url").URL;
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-const {DateTime} = require("luxon");
 const getData = require("./getData");
 const getToken = require("./getToken");
 const NodeCache = require("node-cache");
@@ -97,7 +96,7 @@ app.get("/redirect", (req, res) => {
 const LogItem = require("./models/LogItem");
 
 app.get("/groups/:id/jobs", function (req, res) {
-  const timezoneOffset = getTimezoneAPI.getTimezone(
+  const clientTimezone = getTimezoneAPI.getTimezone(
     req.headers[`x-forwarded-for`]
   );
   if (req.cookies.access_token === "" || req.cookies.access_token == null) {
@@ -118,7 +117,7 @@ app.get("/groups/:id/jobs", function (req, res) {
         req.params.id,
         req.cookies.access_token,
         projects,
-        timezoneOffset
+        clientTimezone
       );
     })
     .then((data) => {
@@ -172,7 +171,7 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/api/groups/:id/jobs", (req, res) => {
-  const timezoneOffset = getTimezoneAPI.getTimezone(
+  const clientTimezone = getTimezoneAPI.getTimezone(
     req.headers[`x-forwarded-for`]
   );
   getProjectIDs(req.params.id, req.cookies.access_token)
@@ -181,7 +180,7 @@ app.get("/api/groups/:id/jobs", (req, res) => {
         req.params.id,
         req.cookies.access_token,
         projectIDs,
-        timezoneOffset
+        clientTimezone
       )
     )
     .then((jobs) => {
