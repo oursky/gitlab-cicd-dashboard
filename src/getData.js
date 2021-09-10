@@ -1,4 +1,5 @@
 const gitlabAPI = require("./gitlabAPI");
+const getLocalTime = require("./getLocalTime");
 
 module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
   const apiToken = token;
@@ -25,10 +26,28 @@ module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
     });
 };
 
-module.exports.getJobs = function getJobs(requestedGroupID, token, projects) {
+module.exports.getJobs = function getJobs(
+  requestedGroupID,
+  token,
+  projects,
+  timezone
+) {
   const jobPromises = projects.map((project) => {
     return gitlabAPI.getJobsByProjectID(token, project.id).then((jobs) => {
-      return jobs.map((job) => ({ ...job, project_name: project.name }));
+      return jobs.map((job) => {
+        const createdTimeStr = getLocalTime.getTimeByTimezone(
+          job.created_at,
+          timezone
+        );
+        const startedTimeStr =
+          getLocalTime.getTimeByTimezone(job.started_at, timezone) || "Not yet started";
+        return {
+          ...job,
+          project_name: project.name,
+          created_at: createdTimeStr,
+          started_at: startedTimeStr,
+        };
+      });
     });
   });
   return Promise.all(jobPromises).then((data) => {

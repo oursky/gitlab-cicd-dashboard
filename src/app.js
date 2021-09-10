@@ -7,6 +7,7 @@ const getData = require("./getData");
 const getToken = require("./getToken");
 const NodeCache = require("node-cache");
 const withCache = require("./withCache");
+const getTimezoneAPI = require("./getTimezoneAPI");
 const projectIDsCache = new NodeCache();
 const jobsCache = new NodeCache();
 
@@ -95,6 +96,9 @@ app.get("/redirect", (req, res) => {
 const LogItem = require("./models/LogItem");
 
 app.get("/groups/:id/jobs", function (req, res) {
+  const clientTimezone = getTimezoneAPI.getTimezone(
+    req.headers[`x-forwarded-for`]
+  );
   if (req.cookies.access_token === "" || req.cookies.access_token == null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
@@ -109,34 +113,39 @@ app.get("/groups/:id/jobs", function (req, res) {
 
   getProjectIDs(req.params.id, req.cookies.access_token)
     .then((projects) => {
-      return getJobs(req.params.id, req.cookies.access_token, projects);
+      return getJobs(
+        req.params.id,
+        req.cookies.access_token,
+        projects,
+        clientTimezone
+      );
     })
     .then((data) => {
-      const createdJobs = data.filter((data) => data.status === "created")
-      const pendingJobs = data.filter((data) => data.status === "pending")
-      const runningJobs = data.filter((data) => data.status === "running")
-      
-      const createdCards = createdJobs.map((job)=>{
-        return{
+      const createdJobs = data.filter((data) => data.status === "created");
+      const pendingJobs = data.filter((data) => data.status === "pending");
+      const runningJobs = data.filter((data) => data.status === "running");
+
+      const createdCards = createdJobs.map((job) => {
+        return {
           name: job.project_name,
           tags: job.tag_list,
-          html: cardTemplate({job: job})
-        }
-      })
-      const pendingCards = pendingJobs.map((job)=>{
-        return{
+          html: cardTemplate({ job: job }),
+        };
+      });
+      const pendingCards = pendingJobs.map((job) => {
+        return {
           name: job.project_name,
           tags: job.tag_list,
-          html: cardTemplate({job: job})
-        }
-      })
-      const runningCards = runningJobs.map((job)=>{
-        return{
+          html: cardTemplate({ job: job }),
+        };
+      });
+      const runningCards = runningJobs.map((job) => {
+        return {
           name: job.project_name,
           tags: job.tag_list,
-          html: cardTemplate({job: job})
-        }
-      })
+          html: cardTemplate({ job: job }),
+        };
+      });
       res.render("pages/index", {
         created: createdJobs,
         pending: pendingJobs,
@@ -162,9 +171,17 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/api/groups/:id/jobs", (req, res) => {
+  const clientTimezone = getTimezoneAPI.getTimezone(
+    req.headers[`x-forwarded-for`]
+  );
   getProjectIDs(req.params.id, req.cookies.access_token)
     .then((projectIDs) =>
-      getJobs(req.params.id, req.cookies.access_token, projectIDs)
+      getJobs(
+        req.params.id,
+        req.cookies.access_token,
+        projectIDs,
+        clientTimezone
+      )
     )
     .then((jobs) => {
       return jobs.filter((jobs) => jobs.status === req.query.status);
