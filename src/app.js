@@ -27,6 +27,10 @@ const {
 
 const app = express();
 
+const cardTemplate = ejs.compile(
+  read("src/views/partials/singleJobCard.ejs", "utf-8")
+);
+
 if ([origin, AppID, APP_SECRET, redirect_url, cookieAge].includes("")) {
   console.warn("[WARNING] config.js has at least one empty property.");
 }
@@ -108,38 +112,30 @@ app.get("/groups/:id/jobs", function (req, res) {
       return getJobs(req.params.id, req.cookies.access_token, projects);
     })
     .then((data) => {
-      const createdCards = []
-      const pendingCards = []
-      const runningCards = []
       const createdJobs = data.filter((data) => data.status === "created")
       const pendingJobs = data.filter((data) => data.status === "pending")
       const runningJobs = data.filter((data) => data.status === "running")
-      const cardTemplate = ejs.compile(
-        read("src/views/partials/singleJobCard.ejs", "utf-8")
-      );
-      createdJobs.map((job)=>{
-        const jobObj = {
+      
+      const createdCards = createdJobs.map((job)=>{
+        return{
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({job: job})
         }
-      createdCards.push(jobObj)
       })
-      pendingJobs.map((job)=>{
-        const jobObj = {
+      const pendingCards = pendingJobs.map((job)=>{
+        return{
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({job: job})
         }
-      pendingCards.push(jobObj)
       })
-      runningJobs.map((job)=>{
-        const jobObj = {
+      const runningCards = runningJobs.map((job)=>{
+        return{
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({job: job})
         }
-      runningCards.push(jobObj)
       })
       res.render("pages/index", {
         created: createdJobs,
@@ -174,17 +170,12 @@ app.get("/api/groups/:id/jobs", (req, res) => {
       return jobs.filter((jobs) => jobs.status === req.query.status);
     })
     .then((filteredJobs) => {
-      const jobsArr = [];
-      const cardTemplate = ejs.compile(
-        read("src/views/partials/singleJobCard.ejs", "utf-8")
-      );
-      JobsArr = filteredJobs.map((job) => {
-        const jobObj = {
+      const jobsArr = filteredJobs.map((job) => {
+        return {
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({ job: job }),
         };
-        jobsArr.push(jobObj);
       });
       res.send(jobsArr);
     });
