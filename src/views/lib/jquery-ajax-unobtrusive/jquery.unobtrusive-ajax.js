@@ -85,6 +85,7 @@
       parseInt(element.getAttribute("data-ajax-loading-duration"), 10) || 0;
 
     $.extend(options, {
+      groupby: element.getAttribute("data-ajax-groupby") || undefined,
       postfn: element.getAttribute("data-ajax-postfn") || undefined,
       type: element.getAttribute("data-ajax-method") || undefined,
       url: element.getAttribute("data-ajax-url") || undefined,
@@ -116,6 +117,14 @@
             "status",
             "xhr",
           ]).apply(element, arguments);
+        }
+        if (element.getAttribute("data-ajax-groupby") != null) {
+          getFunction(element.getAttribute("data-ajax-groupby"), [
+            "data",
+            "status",
+            "xhr",
+          ]).apply(element, arguments);
+          return;
         }
 
         asyncOnSuccess(

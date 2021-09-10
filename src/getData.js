@@ -12,16 +12,25 @@ module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
     .getProjectsByGroupID(apiToken, groupID, getProjectSearchParams)
 
     .then((projects) => {
-      const ids = projects.map((project) => project.id);
-
-      return ids;
+      const projectList = [];
+      projects.map((project) => {
+        const projectObj = {
+          id: project.id,
+          name: project.name,
+        };
+        projectList.push(projectObj);
+        return projectList;
+      });
+      return projectList;
     });
 };
 
-module.exports.getJobs = function getJobs(requestedGroupID, token, projectIDs) {
-  const jobPromises = projectIDs.map((projectID) =>
-    gitlabAPI.getJobsByProjectID(token, projectID)
-  );
+module.exports.getJobs = function getJobs(requestedGroupID, token, projects) {
+  const jobPromises = projects.map((project) => {
+    return gitlabAPI.getJobsByProjectID(token, project.id).then((jobs) => {
+      return jobs.map((job) => ({ ...job, project_name: project.name }));
+    });
+  });
   return Promise.all(jobPromises).then((data) => {
     const flattenedJobArray = data.flat();
     const sortedData = flattenedJobArray.sort(
