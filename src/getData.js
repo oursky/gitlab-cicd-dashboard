@@ -40,36 +40,7 @@ module.exports.getJobs = function getJobs(
           timezone
         );
         const startedTimeStr =
-          getLocalTime.getTimeByTimezone(job.started_at, timezone) ||
-          "Not yet started";
-        // const zuluCreatedTime = new Date(job.created_at.replace("Z", ""));
-        // const localCreatedTime = new Date(
-        //   zuluCreatedTime.getTime() + parseInt(timezoneOffset) * 36000
-        // );
-        // const createdMonth = localCreatedTime.getMonth() + 1;
-        // const createdTimeStr =
-        //   `${localCreatedTime.getFullYear()}` +
-        //   `/${createdMonth}` +
-        //   `/${localCreatedTime.getHours()}` +
-        //   ` ${localCreatedTime.getHours()}` +
-        //   `:${localCreatedTime.getMinutes()}` +
-        //   `:${localCreatedTime.getSeconds()}`;
-
-        // var startedTimeStr = "Not yet started";
-        // if (job.started_at != null) {
-        //   const zuluStartedTime = new Date(job.started_at.replace("Z", ""));
-        //   const localStartedTime = new Date(
-        //     zuluStartedTime.getTime() + parseInt(timezoneOffset) * 36000
-        //   );
-        //   const startedMonth = localStartedTime.getMonth() + 1;
-        //   startedTimeStr =
-        //     `${localStartedTime.getFullYear()}` +
-        //     `/${startedMonth}` +
-        //     `/${localStartedTime.getHours()}` +
-        //     ` ${localStartedTime.getHours()}` +
-        //     `:${localStartedTime.getMinutes()}` +
-        //     `:${localStartedTime.getSeconds()}`;
-        // }
+          getLocalTime.getTimeByTimezone(job.started_at, timezone) || "Not yet started";
         return {
           ...job,
           project_name: project.name,
