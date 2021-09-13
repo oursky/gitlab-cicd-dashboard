@@ -7,8 +7,6 @@ module.exports.getProjectIDs = function getProjectIDs(requestedGroupID, token) {
   const getProjectSearchParams = new URLSearchParams("");
   getProjectSearchParams.append("order_by", "last_activity_at");
 
-  console.log(`Getting jobs of group: ${groupID}`);
-
   return gitlabAPI
     .getProjectsByGroupID(apiToken, groupID, getProjectSearchParams)
 

@@ -10,6 +10,7 @@ const withCache = require("./withCache");
 const getTimezoneAPI = require("./getTimezoneAPI");
 const projectIDsCache = new NodeCache();
 const jobsCache = new NodeCache();
+const timezoneCache = new NodeCache();
 
 const read = require("fs").readFileSync;
 const ejs = require("ejs");
@@ -51,6 +52,10 @@ const getJobs = withCache(getData.getJobs, {
   cacheStorage: jobsCache,
   ttl: CACHE_TIMEOUT / 1000,
 });
+const getTimezone = withCache(getTimezoneAPI.getTimezone, {
+  cacheStorage: timezoneCache,
+  ttl: 2592000,
+})
 
 if (!DB_URL) {
   mongoose
@@ -96,9 +101,8 @@ app.get("/redirect", (req, res) => {
 const LogItem = require("./models/LogItem");
 
 app.get("/groups/:id/jobs", function (req, res) {
-  const clientTimezone = getTimezoneAPI.getTimezone(
-    req.headers[`x-forwarded-for`]
-  );
+  console.log(`${req.headers["x-forwarded-for"] || "Local"}(requested) -> Group: ${req.params.id}`)
+  const clientTimezone = getTimezone(req.headers[`x-forwarded-for`]);
   if (req.cookies.access_token === "" || req.cookies.access_token == null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
@@ -155,8 +159,6 @@ app.get("/groups/:id/jobs", function (req, res) {
         running_cards: runningCards,
         cache_timeout: CACHE_TIMEOUT,
         groupID: req.params.id,
-        debug_ip: req.headers[`x-forwarded-for`], //debug
-        debug_timezone: clientTimezone, //debug
       });
     })
     .catch((err) => {
@@ -173,7 +175,7 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/api/groups/:id/jobs", (req, res) => {
-  const clientTimezone = getTimezoneAPI.getTimezone(
+  const clientTimezone = getTimezone(
     req.headers[`x-forwarded-for`]
   );
   getProjectIDs(req.params.id, req.cookies.access_token)
@@ -194,8 +196,6 @@ app.get("/api/groups/:id/jobs", (req, res) => {
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({ job: job }),
-          debug_ip: req.headers[`x-forwarded-for`], //debug
-          debug_timezone: clientTimezone, //debug
         };
       });
       res.send(jobsArr);

@@ -1,9 +1,14 @@
 const { DateTime } = require("luxon");
 
-exports.getTimeByTimezone = function getTimeByTimezone(zuluTime, timezone) {
+exports.getTimeByTimezone = function getTimeByTimezone(zuluTime, clientTimezone) {
   if (zuluTime == null) {
     return;
   }
+  const timezone = "Asia/Hong_Kong"
+  if(typeof clientTimezone === 'string'){
+    timezone = clientTimezone
+  }
+  
   const timeObj = DateTime.fromISO(zuluTime);
   const convertedTime = DateTime.fromObject(
     {
