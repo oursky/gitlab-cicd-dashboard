@@ -155,6 +155,8 @@ app.get("/groups/:id/jobs", function (req, res) {
         running_cards: runningCards,
         cache_timeout: CACHE_TIMEOUT,
         groupID: req.params.id,
+        debug_ip: req.headers[`x-forwarded-for`], //debug
+        debug_timezone: clientTimezone, //debug
       });
     })
     .catch((err) => {
@@ -192,6 +194,8 @@ app.get("/api/groups/:id/jobs", (req, res) => {
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({ job: job }),
+          debug_ip: req.headers[`x-forwarded-for`], //debug
+          debug_timezone: clientTimezone, //debug
         };
       });
       res.send(jobsArr);
