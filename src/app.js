@@ -7,9 +7,10 @@ const getData = require("./getData");
 const getToken = require("./getToken");
 const NodeCache = require("node-cache");
 const withCache = require("./withCache");
-const getTimezoneAPI = require("./getTimezone");
+const getTimezoneAPI = require("./getTimezoneAPI");
 const projectIDsCache = new NodeCache();
 const jobsCache = new NodeCache();
+const timezoneCache = new NodeCache();
 
 const read = require("fs").readFileSync;
 const ejs = require("ejs");
@@ -51,6 +52,10 @@ const getJobs = withCache(getData.getJobs, {
   cacheStorage: jobsCache,
   ttl: CACHE_TIMEOUT / 1000,
 });
+const getTimezone = withCache(getTimezoneAPI.getTimezone, {
+  cacheStorage: timezoneCache,
+  ttl: 2592000,
+})
 
 if (!DB_URL) {
   mongoose
@@ -97,9 +102,7 @@ const LogItem = require("./models/LogItem");
 
 app.get("/groups/:id/jobs", function (req, res) {
   console.log(`${req.headers["x-forwarded-for"] || "Local"}(requested) -> Group: ${req.params.id}`)
-  const clientTimezone = getTimezoneAPI.getTimezone(
-    req.headers[`x-forwarded-for`]
-  );
+  const clientTimezone = getTimezone(req.headers[`x-forwarded-for`]);
   if (req.cookies.access_token === "" || req.cookies.access_token == null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
@@ -172,7 +175,7 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/api/groups/:id/jobs", (req, res) => {
-  const clientTimezone = getTimezoneAPI.getTimezone(
+  const clientTimezone = getTimezone(
     req.headers[`x-forwarded-for`]
   );
   getProjectIDs(req.params.id, req.cookies.access_token)
