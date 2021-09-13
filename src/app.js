@@ -7,7 +7,7 @@ const getData = require("./getData");
 const getToken = require("./getToken");
 const NodeCache = require("node-cache");
 const withCache = require("./withCache");
-const getTimezoneAPI = require("./getTimezoneAPI");
+const getTimezoneAPI = require("./getTimezone");
 const projectIDsCache = new NodeCache();
 const jobsCache = new NodeCache();
 
@@ -96,6 +96,7 @@ app.get("/redirect", (req, res) => {
 const LogItem = require("./models/LogItem");
 
 app.get("/groups/:id/jobs", function (req, res) {
+  console.log(`${req.headers["x-forwarded-for"] || "Local"}(requested) -> Group: ${req.params.id}`)
   const clientTimezone = getTimezoneAPI.getTimezone(
     req.headers[`x-forwarded-for`]
   );
@@ -155,8 +156,6 @@ app.get("/groups/:id/jobs", function (req, res) {
         running_cards: runningCards,
         cache_timeout: CACHE_TIMEOUT,
         groupID: req.params.id,
-        debug_ip: req.headers[`x-forwarded-for`], //debug
-        debug_timezone: clientTimezone, //debug
       });
     })
     .catch((err) => {
@@ -194,8 +193,6 @@ app.get("/api/groups/:id/jobs", (req, res) => {
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({ job: job }),
-          debug_ip: req.headers[`x-forwarded-for`], //debug
-          debug_timezone: clientTimezone, //debug
         };
       });
       res.send(jobsArr);
