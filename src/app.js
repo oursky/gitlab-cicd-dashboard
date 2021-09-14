@@ -194,7 +194,7 @@ app.get("/api/groups/:id/jobs", (req, res) => {
         req.params.id,
         req.cookies.access_token,
         projectIDs,
-        clientTimezone
+        clientTimezone,
       )
     )
     .then((jobs) => {

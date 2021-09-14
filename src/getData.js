@@ -30,6 +30,7 @@ module.exports.getJobs = function getJobs(
   projects,
   timezone
 ) {
+  console.log(timezone)
   const jobPromises = projects.map((project) => {
     return gitlabAPI.getJobsByProjectID(token, project.id).then((jobs) => {
       return jobs.map((job) => {
