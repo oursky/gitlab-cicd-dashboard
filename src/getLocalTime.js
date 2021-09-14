@@ -6,10 +6,8 @@ exports.getTimeByTimezone = function getTimeByTimezone(zuluTime, clientTimezone)
   }
   let timezone = "Asia/Hong_Kong"
   if(!clientTimezone.error){
-    timezone = clientTimezone
+    timezone = clientTimezone.timezone
   }
-
-  console.log(timezone)
   
   const timeObj = DateTime.fromISO(zuluTime);
   const convertedTime = DateTime.fromObject(
@@ -23,6 +21,6 @@ exports.getTimeByTimezone = function getTimeByTimezone(zuluTime, clientTimezone)
     },
     { zone: timezone }
   );
-  console.log(convertedTime)
+  console.log(convertedTime.toLocaleString(DateTime.DATETIME_MED))
   return convertedTime.toLocaleString(DateTime.DATETIME_MED);
 };
