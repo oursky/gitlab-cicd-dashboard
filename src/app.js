@@ -183,10 +183,12 @@ app.get("/error", (req, res) => {
 });
 
 app.get("/api/groups/:id/jobs", (req, res) => {
-  const clientTimezone = getTimezone(
-    req.headers[`x-forwarded-for`]
-  );
-  getProjectIDs(req.params.id, req.cookies.access_token)
+  let clientTimezone;
+  getTimezone(req.headers[`x-forwarded-for`])
+  .then(timezone => {
+    clientTimezone = timezone
+    return getProjectIDs(req.params.id, req.cookies.access_token)
+  })
     .then((projectIDs) =>
       getJobs(
         req.params.id,
