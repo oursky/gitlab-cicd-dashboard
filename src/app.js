@@ -102,7 +102,7 @@ const LogItem = require("./models/LogItem");
 
 app.get("/groups/:id/jobs", function (req, res) {
   console.log(`${req.headers["x-forwarded-for"] || "Local"}(requested) -> Group: ${req.params.id}`)
-  const clientTimezone = getTimezone(req.headers[`x-forwarded-for`]);
+
   if (req.cookies.access_token === "" || req.cookies.access_token == null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
     return;
@@ -115,7 +115,13 @@ app.get("/groups/:id/jobs", function (req, res) {
     newLog.save().then((log) => console.log(log));
   }
 
-  getProjectIDs(req.params.id, req.cookies.access_token)
+  let clientTimezone;
+
+  getTimezone(req.headers[`x-forwarded-for`])
+    .then((timezone) => {
+      clientTimezone = timezone;
+      return getProjectIDs(req.params.id, req.cookies.access_token);
+    })
     .then((projects) => {
       return getJobs(
         req.params.id,
@@ -159,6 +165,8 @@ app.get("/groups/:id/jobs", function (req, res) {
         running_cards: runningCards,
         cache_timeout: CACHE_TIMEOUT,
         groupID: req.params.id,
+        debug_clientIP: req.headers[`x-forwarded-for`] || "local",
+        debug_timezone: JSON.stringify(clientTimezone),
       });
     })
     .catch((err) => {
@@ -196,6 +204,8 @@ app.get("/api/groups/:id/jobs", (req, res) => {
           name: job.project_name,
           tags: job.tag_list,
           html: cardTemplate({ job: job }),
+          debug_clientIP: req.headers[`x-forwarded-for`] || "local",
+          debug_timezone: JSON.stringify(clientTimezone),
         };
       });
       res.send(jobsArr);
