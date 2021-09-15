@@ -30,7 +30,7 @@ module.exports.getJobs = function getJobs(
   projects,
   timezone
 ) {
-  console.log(timezone)
+  console.log(timezone);
   const jobPromises = projects.map((project) => {
     return gitlabAPI.getJobsByProjectID(token, project.id).then((jobs) => {
       return jobs.map((job) => {
@@ -39,7 +39,8 @@ module.exports.getJobs = function getJobs(
           timezone
         );
         const startedTimeStr =
-          getLocalTime.getTimeByTimezone(job.started_at, timezone) || "Not yet started";
+          getLocalTime.getTimeByTimezone(job.started_at, timezone) ||
+          "Not yet started";
         return {
           ...job,
           project_name: project.name,

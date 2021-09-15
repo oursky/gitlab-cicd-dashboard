@@ -55,7 +55,7 @@ const getJobs = withCache(getData.getJobs, {
 const getTimezone = withCache(getTimezoneAPI.getTimezone, {
   cacheStorage: timezoneCache,
   ttl: 2592000,
-})
+});
 
 if (!DB_URL) {
   mongoose
@@ -101,7 +101,11 @@ app.get("/redirect", (req, res) => {
 const LogItem = require("./models/LogItem");
 
 app.get("/groups/:id/jobs", function (req, res) {
-  console.log(`${req.headers["x-forwarded-for"] || "Local"}(requested) -> Group: ${req.params.id}`)
+  console.log(
+    `${req.headers["x-forwarded-for"] || "Local"}(requested) -> Group: ${
+      req.params.id
+    }`
+  );
 
   if (req.cookies.access_token === "" || req.cookies.access_token == null) {
     res.redirect(`${origin}/redirect/` + encodeURIComponent(req.originalUrl));
@@ -185,16 +189,16 @@ app.get("/error", (req, res) => {
 app.get("/api/groups/:id/jobs", (req, res) => {
   let clientTimezone;
   getTimezone(req.headers[`x-forwarded-for`])
-  .then(timezone => {
-    clientTimezone = timezone
-    return getProjectIDs(req.params.id, req.cookies.access_token)
-  })
+    .then((timezone) => {
+      clientTimezone = timezone;
+      return getProjectIDs(req.params.id, req.cookies.access_token);
+    })
     .then((projectIDs) =>
       getJobs(
         req.params.id,
         req.cookies.access_token,
         projectIDs,
-        clientTimezone,
+        clientTimezone
       )
     )
     .then((jobs) => {
