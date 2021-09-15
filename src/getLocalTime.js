@@ -10,6 +10,10 @@ exports.getTimeByTimezone = function getTimeByTimezone(zuluTime, clientTimezone)
   }
   
   const timeObj = DateTime.fromISO(zuluTime);
+  console.log("API Error: "+clientTimezone.error)
+  console.log("Original Time: "+zuluTime)
+  console.log("Library converted DateTime obj: "+timeObj)
+  console.log("Current Timezone: "+timezone)
   const convertedTime = DateTime.fromObject(
     {
       year: timeObj.year,
@@ -21,6 +25,7 @@ exports.getTimeByTimezone = function getTimeByTimezone(zuluTime, clientTimezone)
     },
     { zone: timezone }
   );
-  console.log(convertedTime.toLocaleString(DateTime.DATETIME_MED))
+  console.log("converted Time Obj: "+convertedTime)
+  console.log("FINAL RESULT: Timezone: "+ timezone + " Time: " + convertedTime.toLocaleString(DateTime.DATETIME_MED))
   return convertedTime.toLocaleString(DateTime.DATETIME_MED);
 };
