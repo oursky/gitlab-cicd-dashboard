@@ -10,4 +10,6 @@ test:
 
 .PHONY: build-image
 build-image:
+	yarn
+	yarn build-tailwindcss
 	docker build -t $(APP_NAME) .
