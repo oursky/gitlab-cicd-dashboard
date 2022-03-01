@@ -139,6 +139,28 @@ app.get("/groups/:id/jobs", function (req, res) {
       const pendingJobs = data.filter((data) => data.status === "pending");
       const runningJobs = data.filter((data) => data.status === "running");
 
+      const osxJobs = data.filter(
+        (data) =>
+          data.tag_list.indexOf("osx") !== -1 && data.status !== "created"
+      );
+      const nonOsxJobs = data.filter(
+        (data) =>
+          data.tag_list.indexOf("osx") === -1 && data.status !== "created"
+      );
+
+      const osxJobsAverageQueueTime =
+        osxJobs.length === 0
+          ? 0
+          : osxJobs.reduce((acc, job) => acc + (job.queued_duration || 0), 0) /
+            osxJobs.length;
+      const nonOsxJobsAverageQueueTime =
+        nonOsxJobs.length === 0
+          ? 0
+          : nonOsxJobs.reduce(
+              (acc, job) => acc + (job.queued_duration || 0),
+              0
+            ) / nonOsxJobs.length;
+
       const createdCards = createdJobs.map((job) => {
         return {
           name: job.project_name,
@@ -169,6 +191,10 @@ app.get("/groups/:id/jobs", function (req, res) {
         running_cards: runningCards,
         cache_timeout: CACHE_TIMEOUT,
         groupID: req.params.id,
+        averageQueueTime: {
+          osx: osxJobsAverageQueueTime,
+          "non-osx": nonOsxJobsAverageQueueTime,
+        },
       });
     })
     .catch((err) => {
